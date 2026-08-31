@@ -1,0 +1,124 @@
+@import "tailwindcss";
+
+@layer base {
+  :root {
+    --font-heading: 'Outfit', sans-serif;
+    --font-body: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    --color-warm-bg: #FAF7F2;
+    --color-warm-card: #FFFFFF;
+    --color-warm-border: #EADBCE;
+    --color-lavender-50: #FAF5FF;
+    --color-lavender-100: #F3E8FF;
+    --color-lavender-200: #E9D5FF;
+    --color-lavender-600: #7C3AED;
+    --color-lavender-700: #6D28D9;
+    --color-text-main: #1E1B2E;
+    --color-text-muted: #4B465C;
+  }
+
+  body {
+    font-family: var(--font-body);
+    background-color: var(--color-warm-bg);
+    color: var(--color-text-main);
+    font-size: 1.125rem; /* 18px base font size for elderly legibility */
+    line-height: 1.6;
+    letter-spacing: 0.01em;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    font-family: var(--font-heading);
+    letter-spacing: -0.01em;
+  }
+
+  button, a {
+    touch-action: manipulation;
+  }
+}
+
+/* Custom Accessibility & Senior-friendly helper utilities */
+.senior-card {
+  background-color: #FFFFFF;
+  border: 2px solid #EFEAE1;
+  border-radius: 1.5rem;
+  box-shadow: 0 4px 20px -2px rgba(93, 73, 114, 0.06), 0 2px 6px -1px rgba(0, 0, 0, 0.03);
+  transition: transform 0.15s ease, box-shadow 0.15s ease, border-color 0.15s ease;
+}
+
+.senior-card:hover {
+  border-color: #DDD6FE;
+  box-shadow: 0 8px 24px -2px rgba(109, 40, 217, 0.12);
+}
+
+.senior-btn-primary {
+  background: linear-gradient(135deg, #7C3AED 0%, #6D28D9 100%);
+  color: #FFFFFF;
+  font-weight: 700;
+  border-radius: 1.25rem;
+  padding: 1rem 1.75rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  font-size: 1.25rem;
+  box-shadow: 0 4px 14px 0 rgba(109, 40, 217, 0.28);
+  transition: all 0.15s ease-in-out;
+}
+
+.senior-btn-primary:hover {
+  background: linear-gradient(135deg, #6D28D9 0%, #5B21B6 100%);
+  transform: translateY(-1px);
+  box-shadow: 0 6px 18px 0 rgba(109, 40, 217, 0.35);
+}
+
+.senior-btn-primary:active {
+  transform: translateY(1px);
+}
+
+.senior-btn-secondary {
+  background-color: #FAF5FF;
+  border: 2px solid #DDD6FE;
+  color: #5B21B6;
+  font-weight: 700;
+  border-radius: 1.25rem;
+  padding: 0.875rem 1.5rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  font-size: 1.125rem;
+  transition: all 0.15s ease;
+}
+
+.senior-btn-secondary:hover {
+  background-color: #F3E8FF;
+  border-color: #C4B5FD;
+}
+
+.senior-btn-sos {
+  background: linear-gradient(135deg, #EF4444 0%, #DC2626 100%);
+  color: #FFFFFF;
+  font-weight: 800;
+  border-radius: 1.25rem;
+  box-shadow: 0 4px 14px 0 rgba(239, 68, 68, 0.35);
+  border: 2px solid #FCA5A5;
+}
+
+.senior-btn-sos:hover {
+  background: linear-gradient(135deg, #DC2626 0%, #B91C1C 100%);
+}
+
+/* High Contrast Mode support */
+.high-contrast-mode {
+  --color-warm-bg: #FFFFFF !important;
+  background-color: #FFFFFF !important;
+  color: #000000 !important;
+}
+
+.high-contrast-mode .senior-card {
+  border: 3px solid #000000 !important;
+  box-shadow: none !important;
+}
+
+.high-contrast-mode button {
+  border-width: 3px !important;
+}

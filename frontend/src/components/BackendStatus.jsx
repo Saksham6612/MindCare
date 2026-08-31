@@ -1,7 +1,9 @@
 import { useEffect, useState } from "react";
 import { checkBackend, checkDatabase } from "../api/api";
+import { useTranslation } from 'react-i18next';
 
 export default function BackendStatus() {
+  const { t } = useTranslation();
   const [backend, setBackend] = useState("checking");
   const [database, setDatabase] = useState("checking");
 
@@ -42,35 +44,35 @@ export default function BackendStatus() {
   return (
     <div className="p-6 rounded-2xl bg-gray-900 border border-gray-800">
       <h2 className="text-xl font-semibold text-white mb-4">
-        System Status
+        {t('common.system_status', { defaultValue: 'System Status' })}
       </h2>
 
       <div className="space-y-3">
         <div className="flex justify-between">
           <span className="text-gray-300">
-            Backend API
+            {t('common.backend_api', { defaultValue: 'Backend API' })}
           </span>
 
           <span className={statusStyle(backend)}>
             {backend === "connected"
-              ? "● Connected"
+              ? `● ${t('common.connected', { defaultValue: 'Connected' })}`
               : backend === "error"
-              ? "● Error"
-              : "● Checking..."}
+              ? `● ${t('common.error', { defaultValue: 'Error' })}`
+              : `● ${t('common.checking', { defaultValue: 'Checking...' })}`}
           </span>
         </div>
 
         <div className="flex justify-between">
           <span className="text-gray-300">
-            PostgreSQL Database
+            {t('common.postgres_db', { defaultValue: 'PostgreSQL Database' })}
           </span>
 
           <span className={statusStyle(database)}>
             {database === "connected"
-              ? "● Connected"
+              ? `● ${t('common.connected', { defaultValue: 'Connected' })}`
               : database === "error"
-              ? "● Error"
-              : "● Checking..."}
+              ? `● ${t('common.error', { defaultValue: 'Error' })}`
+              : `● ${t('common.checking', { defaultValue: 'Checking...' })}`}
           </span>
         </div>
       </div>

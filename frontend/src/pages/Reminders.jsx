@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
 import {
   ArrowLeft, Plus, Sparkles, Pill, Droplets, Footprints, CalendarClock, Filter
@@ -16,6 +17,8 @@ const TYPE_FILTER_OPTIONS = [
 ];
 
 export default function Reminders() {
+  const { t } = useTranslation();
+
   const [reminders, setReminders] = useState(todaysReminders);
   const [activeFilter, setActiveFilter] = useState('all');
   const [showForm, setShowForm] = useState(false);
@@ -65,13 +68,13 @@ export default function Reminders() {
             className="inline-flex items-center gap-2 text-purple-700 font-bold text-base hover:underline mb-1"
           >
             <ArrowLeft className="w-5 h-5" />
-            <span>Back to Home</span>
+            <span>{t('voice.back_to_home')}</span>
           </Link>
           <h1 className="text-3xl sm:text-4xl font-extrabold text-gray-900 tracking-tight">
-            Today's Reminders
+            {t('reminders.title', { defaultValue: "Today's Reminders" })}
           </h1>
           <p className="text-lg sm:text-xl text-gray-600 font-semibold">
-            Tap <strong className="text-purple-700">"Mark Done"</strong> after completing each item.
+            {t('reminders.tap', { defaultValue: 'Tap' })} <strong className="text-purple-700">"{t('reminders.mark_done', { defaultValue: 'Mark Done' })}"</strong> {t('reminders.after_completing', { defaultValue: 'after completing each item.' })}
           </p>
         </div>
 
@@ -79,10 +82,10 @@ export default function Reminders() {
         <button
           onClick={() => setShowForm(true)}
           className="senior-btn-primary py-3.5 px-6 text-lg sm:text-xl font-extrabold flex items-center gap-2 shrink-0 self-start sm:self-auto"
-          aria-label="Add a new reminder"
+          aria-label={t('reminders.add_reminder', { defaultValue: 'Add Reminder' })}
         >
           <Plus className="w-6 h-6" />
-          Add Reminder
+          {t('reminders.add_reminder', { defaultValue: 'Add Reminder' })}
         </button>
       </div>
 
@@ -92,11 +95,11 @@ export default function Reminders() {
           <div className="flex items-center gap-2">
             <Sparkles className="w-5 h-5 text-purple-600" />
             <span className="text-base sm:text-lg font-extrabold text-purple-900 uppercase tracking-wide">
-              Daily Progress
+              {t('reminders.progress', { defaultValue: 'Daily Progress' })}
             </span>
           </div>
           <span className="text-2xl sm:text-3xl font-black text-gray-900">
-            {completedCount} <span className="text-gray-400 font-semibold text-xl">/ {totalCount} done</span>
+            {completedCount} <span className="text-gray-400 font-semibold text-xl">/ {totalCount} {t('reminders.done', { defaultValue: 'done' })}</span>
           </span>
         </div>
 
@@ -121,7 +124,7 @@ export default function Reminders() {
             const done = todayReminders.filter(r => r.type === key && r.completed).length;
             return (
               <span key={key} className={`text-xs font-bold px-3 py-1 rounded-xl border ${cfg.badgeBg}`}>
-                {cfg.label}: {done}/{count}
+                {t(`reminders.${key}`, { defaultValue: t(`reminders.${cfg.label.toLowerCase().replace(/ /g, '_')}`, { defaultValue: cfg.label }) })}: {done}/{count}
               </span>
             );
           })}
@@ -144,7 +147,7 @@ export default function Reminders() {
               }`}
             >
               <Icon className="w-4 h-4" />
-              {opt.label}
+              {t(`reminders.filter_${opt.value}`, { defaultValue: opt.label })}
             </button>
           );
         })}
@@ -167,11 +170,11 @@ export default function Reminders() {
           <p className="text-5xl">🌸</p>
           <h3 className="text-2xl sm:text-3xl font-extrabold text-gray-800">
             {activeFilter === 'all'
-              ? 'No reminders for today yet.'
-              : `No ${REMINDER_TYPES[activeFilter]?.label} reminders today.`}
+              ? t('reminders.empty_all', { defaultValue: 'No reminders for today yet.' })
+              : t('reminders.empty_type', { type: t(`reminders.filter_${activeFilter}`, { defaultValue: REMINDER_TYPES[activeFilter]?.label }), defaultValue: `No ${REMINDER_TYPES[activeFilter]?.label} reminders today.` })}
           </h3>
           <p className="text-lg text-gray-500 font-semibold">
-            Tap "Add Reminder" above to create one.
+            {t('reminders.empty_sub', { defaultValue: 'Tap "Add Reminder" above to create one.' })}
           </p>
         </div>
       )}

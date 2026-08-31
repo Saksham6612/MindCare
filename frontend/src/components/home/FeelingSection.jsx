@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Heart, Sparkles } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 
 const MOOD_OPTIONS = [
   {
@@ -30,6 +31,7 @@ const MOOD_OPTIONS = [
 
 export default function FeelingSection() {
   const [selectedMood, setSelectedMood] = useState(null);
+  const { t } = useTranslation();
 
   const handleSelect = (moodId) => {
     setSelectedMood(moodId);
@@ -42,7 +44,7 @@ export default function FeelingSection() {
       {/* Title */}
       <div className="flex items-center justify-between">
         <h2 className="text-xl sm:text-2xl md:text-3xl font-extrabold text-gray-900 tracking-tight">
-          How are you feeling today?
+          {t('home.feeling_question') || "How are you feeling today?"}
         </h2>
         <span className="text-xs sm:text-sm font-bold text-purple-700 bg-purple-100 px-3 py-1 rounded-full">
           Daily Check-in
@@ -71,7 +73,7 @@ export default function FeelingSection() {
               <span className={`text-base sm:text-xl font-extrabold block tracking-tight ${
                 isSelected ? 'text-white' : 'text-gray-900'
               }`}>
-                {option.label}
+                {t(`home.feeling_${option.id}`) || option.label}
               </span>
             </button>
           );

@@ -1,9 +1,11 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import { Mic, Volume2, ArrowRight } from 'lucide-react';
 import { quickVoiceSuggestions } from '../../data/mockData';
 
 export default function VoiceAssistantBanner() {
+  const { t } = useTranslation();
   return (
     <section 
       aria-label="Voice Companion Quick Launch"
@@ -16,15 +18,15 @@ export default function VoiceAssistantBanner() {
         <div className="space-y-3 max-w-xl">
           <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-white/20 backdrop-blur-md text-white font-bold text-sm">
             <Volume2 className="w-4 h-4" />
-            <span>AI Voice Companion</span>
+            <span>{t('voice.assistant_title', { defaultValue: 'AI Voice Companion' })}</span>
           </div>
 
           <h2 className="text-2xl sm:text-3xl md:text-4xl font-extrabold text-white tracking-tight">
-            Need help? Just talk to MindCare
+            {t('voice.need_help', { defaultValue: 'Need help? Just talk to MindCare' })}
           </h2>
 
           <p className="text-lg sm:text-xl text-purple-100 font-medium">
-            Tap the button and speak in English, Hindi, or Assamese. No typing required.
+            {t('voice.speak_desc', { defaultValue: 'Tap the button and speak in English, Hindi, or Assamese. No typing required.' })}
           </p>
 
           {/* Quick voice phrase pills */}
@@ -49,8 +51,8 @@ export default function VoiceAssistantBanner() {
             <Mic className="w-7 h-7 sm:w-8 sm:h-8 animate-bounce" />
           </div>
           <div className="text-left">
-            <span className="block text-xl sm:text-2xl font-black">Tap to Speak</span>
-            <span className="block text-xs sm:text-sm font-semibold text-purple-700">One-touch voice help</span>
+            <span className="block text-xl sm:text-2xl font-black">{t('voice.tap_to_speak', { defaultValue: 'Tap to Speak' })}</span>
+            <span className="block text-xs sm:text-sm font-semibold text-purple-700">{t('voice.one_touch', { defaultValue: 'One-touch voice help' })}</span>
           </div>
           <ArrowRight className="w-6 h-6 text-purple-700 group-hover:translate-x-1 transition ml-1" />
         </Link>

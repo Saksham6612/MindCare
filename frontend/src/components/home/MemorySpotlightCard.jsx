@@ -1,8 +1,11 @@
 import React, { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Sparkles, Heart, Volume2, Users, MapPin, Calendar, Check } from 'lucide-react';
 import { memorySpotlight } from '../../data/mockData';
 
 export default function MemorySpotlightCard() {
+  const { t } = useTranslation();
+
   const [isPlayingAudio, setIsPlayingAudio] = useState(false);
   const [hasAcknowledged, setHasAcknowledged] = useState(false);
 
@@ -48,7 +51,7 @@ export default function MemorySpotlightCard() {
           <div className="space-y-3">
             <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-amber-100 text-amber-900 font-extrabold text-sm border border-amber-300">
               <Sparkles className="w-4 h-4 text-amber-700" />
-              <span>Cherished Memory of the Day</span>
+              <span>{t('memory_spotlight.cherished_memory')}</span>
             </div>
 
             <p className="text-xl sm:text-2xl font-bold text-gray-900 leading-snug">
@@ -63,7 +66,7 @@ export default function MemorySpotlightCard() {
             <div className="flex flex-wrap items-center gap-2 pt-1">
               <div className="flex items-center gap-1.5 text-gray-600 font-bold text-sm sm:text-base mr-2">
                 <Users className="w-5 h-5 text-purple-700" />
-                <span>With:</span>
+                <span>{t('memory_spotlight.with')}</span>
               </div>
               {memorySpotlight.familyMembers.map((person, idx) => (
                 <span
@@ -101,12 +104,12 @@ export default function MemorySpotlightCard() {
               {hasAcknowledged ? (
                 <>
                   <Check className="w-5 h-5 text-emerald-700 stroke-[3px]" />
-                  <span>I Remember This!</span>
+                  <span>{t('memory_spotlight.remember_this')}</span>
                 </>
               ) : (
                 <>
                   <Heart className="w-5 h-5 text-rose-500 fill-rose-100" />
-                  <span>I Remember!</span>
+                  <span>{t('memory_spotlight.remember')}</span>
                 </>
               )}
             </button>

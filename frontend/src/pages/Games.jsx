@@ -1,9 +1,12 @@
 import React, { useEffect, useState } from "react";
+import { useTranslation } from 'react-i18next';
 import { useNavigate } from "react-router-dom";
 
 const API_URL = "http://localhost:5001/api";
 
 export default function Games() {
+  const { t } = useTranslation();
+
   const [games, setGames] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
@@ -36,8 +39,8 @@ export default function Games() {
   if (loading) {
     return (
       <div className="p-8">
-        <h1 className="text-3xl font-bold">Games</h1>
-        <p className="mt-4">Loading games...</p>
+        <h1 className="text-3xl font-bold">{t('games.title')}</h1>
+        <p className="mt-4">{t('common.loading')}</p>
       </div>
     );
   }
@@ -45,7 +48,7 @@ export default function Games() {
   if (error) {
     return (
       <div className="p-8">
-        <h1 className="text-3xl font-bold">Games</h1>
+        <h1 className="text-3xl font-bold">{t('games.title')}</h1>
         <p className="mt-4 text-red-500">{error}</p>
       </div>
     );
@@ -53,7 +56,7 @@ export default function Games() {
 
   return (
     <div className="p-8">
-      <h1 className="text-3xl font-bold">Cognitive Games</h1>
+      <h1 className="text-3xl font-bold">{t('games.title')}</h1>
 
       <p className="mt-2 text-gray-500">
         Choose a game to exercise your mind.

@@ -1,5 +1,6 @@
 import React from 'react';
 import { Brain, Pill, Droplets, Smile, Eye, Clock } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 
 const ICON_MAP = {
   Brain,
@@ -25,14 +26,16 @@ const SENTIMENT_CONFIG = {
 };
 
 export default function ActivityList({ activities }) {
+  const { t } = useTranslation();
+
   return (
     <div className="bg-white rounded-2xl border-2 border-gray-200 shadow-sm p-5 sm:p-6 space-y-4">
       <div className="border-b border-gray-100 pb-3">
         <h3 className="text-lg sm:text-xl font-extrabold text-gray-900 tracking-tight">
-          Recent Activity
+          {t('caregiver.recent_activity', { defaultValue: 'Recent Activity' })}
         </h3>
         <p className="text-sm font-semibold text-gray-500">
-          Live patient events from the last 48 hours
+          {t('caregiver.recent_activity_desc', { defaultValue: 'Live patient events from the last 48 hours' })}
         </p>
       </div>
 
@@ -56,15 +59,15 @@ export default function ActivityList({ activities }) {
                 <div className="flex items-center gap-2 mb-0.5">
                   <span className={`w-2 h-2 rounded-full shrink-0 ${sentiment.dot}`} />
                   <h4 className="text-sm sm:text-base font-extrabold text-gray-900 leading-tight">
-                    {activity.title}
+                    {t(`mockData.${activity.title}`, { defaultValue: activity.title })}
                   </h4>
                 </div>
                 <p className="text-xs sm:text-sm font-semibold text-gray-500 leading-snug">
-                  {activity.detail}
+                  {t(`mockData.${activity.detail}`, { defaultValue: activity.detail })}
                 </p>
                 <p className="text-xs font-bold text-gray-400 mt-1 flex items-center gap-1">
                   <Clock className="w-3 h-3" />
-                  {activity.time}
+                  {t(`mockData.${activity.time}`, { defaultValue: activity.time })}
                 </p>
               </div>
             </div>

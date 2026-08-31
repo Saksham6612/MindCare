@@ -1,7 +1,9 @@
 import React, { useState } from 'react';
 import { Droplets, Clock, Plus, Check } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 
 export default function HydrationCard() {
+  const { t } = useTranslation();
   const [glassesDrank, setGlassesDrank] = useState(3);
   const [hasLogged, setHasLogged] = useState(false);
 
@@ -25,21 +27,21 @@ export default function HydrationCard() {
         <div className="space-y-1">
           <div className="flex items-center gap-2">
             <span className="text-xs sm:text-sm font-extrabold uppercase tracking-wider text-sky-800 bg-sky-100 px-3 py-0.5 rounded-full">
-              Hydration
+              {t('home.hydration', { defaultValue: 'Hydration' })}
             </span>
             <span className="text-xs sm:text-sm font-bold text-gray-500">
-              {glassesDrank} of 8 glasses today
+              {glassesDrank} {t('home.of_8_glasses', { defaultValue: 'of 8 glasses today' })}
             </span>
           </div>
 
           <h3 className="text-2xl sm:text-3xl font-extrabold text-gray-900 tracking-tight">
-            Drink Water
+            {t('home.drink_water', { defaultValue: 'Drink Water' })}
           </h3>
 
           <div className="flex items-center gap-1.5 text-base sm:text-lg font-bold text-sky-900 pt-0.5">
             <Clock className="w-5 h-5 text-sky-600" />
-            <span>Next Reminder: 11:30 AM</span>
-            <span className="text-gray-400 font-normal">• 1 Glass</span>
+            <span>{t('home.next_reminder', { defaultValue: 'Next Reminder:' })} 11:30 AM</span>
+            <span className="text-gray-400 font-normal">• 1 {t('home.glass', { defaultValue: 'Glass' })}</span>
           </div>
         </div>
       </div>
@@ -57,12 +59,12 @@ export default function HydrationCard() {
         {hasLogged ? (
           <>
             <Check className="w-6 h-6 stroke-[3px]" />
-            <span>Logged 1 Glass!</span>
+            <span>{t('home.logged_glass', { defaultValue: 'Logged 1 Glass!' })}</span>
           </>
         ) : (
           <>
             <Plus className="w-6 h-6 stroke-[3px]" />
-            <span>I Drank Water</span>
+            <span>{t('home.i_drank_water', { defaultValue: 'I Drank Water' })}</span>
           </>
         )}
       </button>

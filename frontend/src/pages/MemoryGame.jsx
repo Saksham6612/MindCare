@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { Link } from 'react-router-dom';
 import { ArrowLeft, Brain } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 import MemorizeStep from '../components/games/memory/MemorizeStep';
 import RecallStep from '../components/games/memory/RecallStep';
 import ResultsStep from '../components/games/memory/ResultsStep';
@@ -22,6 +23,7 @@ const ALL_OBJECTS_POOL = [
 ];
 
 export default function MemoryGame() {
+  const { t } = useTranslation();
   // Adaptive Difficulty State
   const [currentDifficulty, setCurrentDifficulty] = useState(() => {
     return localStorage.getItem('mindcare_memory_difficulty') || 'Easy';
@@ -156,19 +158,19 @@ export default function MemoryGame() {
             className="inline-flex items-center gap-2 text-purple-700 font-bold text-base hover:underline mb-1"
           >
             <ArrowLeft className="w-5 h-5" />
-            <span>Back to All Games</span>
+            <span>{t('games.back_to_games', { defaultValue: 'Back to All Games' })}</span>
           </Link>
           <h1 className="text-3xl sm:text-4xl font-extrabold text-gray-900 tracking-tight flex items-center gap-3">
-            <span>Memory Challenge</span>
+            <span>{t('home.memory_challenge', { defaultValue: 'Memory Challenge' })}</span>
             <span className="text-xs font-black uppercase tracking-wider text-purple-800 bg-purple-100 px-3 py-1 rounded-full border border-purple-200">
-              {currentDifficulty} Level
+              {t(`games.${currentDifficulty.toLowerCase()}`, { defaultValue: currentDifficulty })} {t('home.level', { defaultValue: 'Level' })}
             </span>
           </h1>
         </div>
 
         <div className="flex items-center gap-2 text-sm sm:text-base font-bold text-gray-600 bg-white border-2 border-purple-200 px-4 py-2 rounded-2xl self-start sm:self-auto shadow-2xs">
           <Brain className="w-5 h-5 text-purple-600" />
-          <span>Adaptive Cognitive Engine</span>
+          <span>{t('games.adaptive_engine', { defaultValue: 'Adaptive Cognitive Engine' })}</span>
         </div>
       </div>
 

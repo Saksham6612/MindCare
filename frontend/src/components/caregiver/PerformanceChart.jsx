@@ -11,11 +11,12 @@ import {
   Tooltip,
   Legend
 } from 'recharts';
+import { useTranslation } from 'react-i18next';
 
 const CHART_LINES = [
-  { key: 'memory', label: 'Memory', color: '#7C3AED' },
-  { key: 'attention', label: 'Attention', color: '#0EA5E9' },
-  { key: 'pattern', label: 'Pattern', color: '#10B981' }
+  { key: 'memory', labelKey: 'games.memory_game', labelDefault: 'Memory', color: '#7C3AED' },
+  { key: 'attention', labelKey: 'caregiver.attention', labelDefault: 'Attention', color: '#0EA5E9' },
+  { key: 'pattern', labelKey: 'caregiver.pattern', labelDefault: 'Pattern', color: '#10B981' }
 ];
 
 function CustomTooltip({ active, payload, label }) {
@@ -38,6 +39,7 @@ function CustomTooltip({ active, payload, label }) {
 }
 
 export default function PerformanceChart({ data }) {
+  const { t } = useTranslation();
   const [chartType, setChartType] = useState('line');
   const [visibleLines, setVisibleLines] = useState(
     Object.fromEntries(CHART_LINES.map(l => [l.key, true]))
@@ -53,10 +55,10 @@ export default function PerformanceChart({ data }) {
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
         <div>
           <h3 className="text-lg sm:text-xl font-extrabold text-gray-900 tracking-tight">
-            Weekly Cognitive Performance
+            {t('caregiver.weekly_perf_title', { defaultValue: 'Weekly Cognitive Performance' })}
           </h3>
           <p className="text-sm font-semibold text-gray-500">
-            Memory, Attention & Pattern Recognition (%) — Last 7 days
+            {t('caregiver.weekly_perf_desc', { defaultValue: 'Memory, Attention & Pattern Recognition (%) — Last 7 days' })}
           </p>
         </div>
 
@@ -72,7 +74,7 @@ export default function PerformanceChart({ data }) {
                   : 'bg-white text-gray-600 hover:bg-gray-50'
               }`}
             >
-              {type}
+              {t(`caregiver.${type}`, { defaultValue: type })}
             </button>
           ))}
         </div>
@@ -91,7 +93,7 @@ export default function PerformanceChart({ data }) {
             }`}
           >
             <span className="w-3 h-3 rounded-full" style={{ background: line.color }} />
-            {line.label}
+            {t(line.labelKey, { defaultValue: line.labelDefault })}
           </button>
         ))}
       </div>
@@ -110,7 +112,7 @@ export default function PerformanceChart({ data }) {
                   key={line.key}
                   type="monotone"
                   dataKey={line.key}
-                  name={line.label}
+                  name={t(line.labelKey, { defaultValue: line.labelDefault })}
                   stroke={line.color}
                   strokeWidth={2.5}
                   dot={{ r: 4, fill: line.color, strokeWidth: 2, stroke: '#fff' }}
@@ -129,7 +131,7 @@ export default function PerformanceChart({ data }) {
                 <Bar
                   key={line.key}
                   dataKey={line.key}
-                  name={line.label}
+                  name={t(line.labelKey, { defaultValue: line.labelDefault })}
                   fill={line.color}
                   radius={[4, 4, 0, 0]}
                 />

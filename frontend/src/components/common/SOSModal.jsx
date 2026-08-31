@@ -1,8 +1,10 @@
 import React from 'react';
 import { Phone, PhoneCall, AlertTriangle, X, ShieldAlert, Heart } from 'lucide-react';
 import { EMERGENCY_CONTACTS } from '../../utils/constants';
+import { useTranslation } from 'react-i18next';
 
 export default function SOSModal({ isOpen, onClose }) {
+  const { t } = useTranslation();
   if (!isOpen) return null;
 
   return (
@@ -21,17 +23,17 @@ export default function SOSModal({ isOpen, onClose }) {
             </div>
             <div>
               <h2 id="sos-modal-title" className="text-2xl md:text-3xl font-extrabold text-red-600">
-                Emergency & Help
+                {t('sos.title', { defaultValue: 'Emergency & Help' })}
               </h2>
               <p className="text-gray-600 font-medium text-base">
-                Tap any button below to call immediately
+                {t('sos.subtitle', { defaultValue: 'Tap any button below to call immediately' })}
               </p>
             </div>
           </div>
           <button
             onClick={onClose}
-            aria-label="Close emergency modal"
-            className="p-2.5 rounded-full hover:bg-gray-100 text-gray-500 hover:text-gray-800 transition"
+            aria-label={t('common.close', { defaultValue: 'Close' })}
+            className="p-2.5 rounded-full hover:bg-gray-100 text-gray-500 hover:text-gray-800 transition cursor-pointer"
           >
             <X className="w-7 h-7" />
           </button>
@@ -50,10 +52,10 @@ export default function SOSModal({ isOpen, onClose }) {
               </div>
               <div className="text-left">
                 <span className="block text-sm font-bold text-purple-700 uppercase tracking-wider">
-                  Primary Family Contact
+                  {t('sos.family_contact', { defaultValue: 'Primary Family Contact' })}
                 </span>
                 <span className="block text-xl md:text-2xl font-bold text-gray-900">
-                  {EMERGENCY_CONTACTS.caregiverName}
+                  {t('sos.caregiver_name', { defaultValue: EMERGENCY_CONTACTS.caregiverName })}
                 </span>
                 <span className="block text-base text-gray-600">
                   {EMERGENCY_CONTACTS.caregiverPhone}
@@ -76,10 +78,10 @@ export default function SOSModal({ isOpen, onClose }) {
               </div>
               <div className="text-left">
                 <span className="block text-sm font-bold text-blue-700 uppercase tracking-wider">
-                  Family Physician
+                  {t('sos.physician', { defaultValue: 'Family Physician' })}
                 </span>
                 <span className="block text-xl md:text-2xl font-bold text-gray-900">
-                  {EMERGENCY_CONTACTS.doctorName}
+                  {t('sos.doctor_name', { defaultValue: EMERGENCY_CONTACTS.doctorName })}
                 </span>
                 <span className="block text-base text-gray-600">
                   {EMERGENCY_CONTACTS.doctorPhone}
@@ -102,15 +104,15 @@ export default function SOSModal({ isOpen, onClose }) {
               </div>
               <div className="text-left">
                 <span className="block text-lg font-bold text-gray-900">
-                  Elder Line Helpline (14567)
+                  {t('sos.elderline', { defaultValue: 'Elder Line Helpline (14567)' })}
                 </span>
                 <span className="text-sm text-gray-600">
-                  Free 24/7 National Senior Support
+                  {t('sos.elderline_desc', { defaultValue: 'Free 24/7 National Senior Support' })}
                 </span>
               </div>
             </div>
             <span className="text-base font-bold text-emerald-700 bg-emerald-100 px-3 py-1.5 rounded-lg">
-              Toll Free
+              {t('sos.toll_free', { defaultValue: 'Toll Free' })}
             </span>
           </a>
         </div>
@@ -118,9 +120,9 @@ export default function SOSModal({ isOpen, onClose }) {
         {/* Close Button */}
         <button
           onClick={onClose}
-          className="w-full py-4 text-xl font-bold text-gray-700 bg-gray-100 hover:bg-gray-200 rounded-2xl transition border-2 border-gray-300"
+          className="w-full py-4 text-xl font-bold text-gray-700 bg-gray-100 hover:bg-gray-200 rounded-2xl transition border-2 border-gray-300 cursor-pointer"
         >
-          I am Safe • Close This
+          {t('sos.safe_close', { defaultValue: 'I am Safe • Close This' })}
         </button>
       </div>
     </div>

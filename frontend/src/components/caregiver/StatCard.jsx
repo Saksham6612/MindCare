@@ -1,18 +1,7 @@
 import React from 'react';
 import { TrendingUp, TrendingDown, Minus } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 
-/**
- * Reusable StatCard for the caregiver dashboard.
- * @param {string} label - Card label
- * @param {string|number} value - Primary metric value
- * @param {string} subtitle - Secondary description
- * @param {React.Component} icon - Lucide icon component
- * @param {string} iconBg - Tailwind bg class for icon container
- * @param {string} iconColor - Tailwind text class for icon
- * @param {number} trend - Positive or negative change to show
- * @param {string} trendLabel - Label for the trend (e.g. "vs last week")
- * @param {string} borderColor - Tailwind border-color class
- */
 export default function StatCard({
   label,
   value,
@@ -25,6 +14,7 @@ export default function StatCard({
   borderColor = 'border-purple-200',
   children
 }) {
+  const { t } = useTranslation();
   const hasTrend = typeof trend === 'number';
   const isPositive = trend > 0;
   const isNeutral = trend === 0;
@@ -34,14 +24,14 @@ export default function StatCard({
       <div className="flex items-start justify-between gap-3">
         <div>
           <p className="text-xs sm:text-sm font-extrabold uppercase tracking-wider text-gray-500">
-            {label}
+            {t(`caregiver.${label.toLowerCase().replace(/ /g, '_')}`, { defaultValue: t(label, { defaultValue: label }) })}
           </p>
           <p className="text-3xl sm:text-4xl font-black text-gray-900 mt-1 tracking-tight">
             {value}
           </p>
           {subtitle && (
             <p className="text-sm font-semibold text-gray-500 mt-0.5">
-              {subtitle}
+              {t(`caregiver.${subtitle.toLowerCase().replace(/ /g, '_')}`, { defaultValue: t(subtitle, { defaultValue: subtitle }) })}
             </p>
           )}
         </div>
@@ -65,7 +55,7 @@ export default function StatCard({
           <span className={
             isNeutral ? 'text-gray-500' : isPositive ? 'text-emerald-700' : 'text-rose-700'
           }>
-            {isPositive ? '+' : ''}{trend}% {trendLabel}
+            {isPositive ? '+' : ''}{trend}% {t('caregiver.vs_last_week', { defaultValue: trendLabel })}
           </span>
         </div>
       )}

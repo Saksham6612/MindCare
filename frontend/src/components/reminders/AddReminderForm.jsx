@@ -1,12 +1,13 @@
 import React, { useState } from 'react';
 import { X, Plus, Clock, Calendar, AlignLeft, Tag } from 'lucide-react';
 import { REMINDER_TYPES } from '../../data/mockData';
+import { useTranslation } from 'react-i18next';
 
 const TYPE_OPTIONS = [
-  { value: 'medicine', label: '💊 Medicine' },
-  { value: 'hydration', label: '💧 Hydration' },
-  { value: 'activity', label: '🚶 Daily Activity' },
-  { value: 'appointment', label: '🏥 Medical Appointment' }
+  { value: 'medicine', icon: '💊', labelKey: 'reminders.medicine', defaultLabel: 'Medicine' },
+  { value: 'hydration', icon: '💧', labelKey: 'reminders.hydration', defaultLabel: 'Hydration' },
+  { value: 'activity', icon: '🚶', labelKey: 'reminders.daily_activity', defaultLabel: 'Daily Activity' },
+  { value: 'appointment', icon: '🏥', labelKey: 'reminders.medical_appointment', defaultLabel: 'Medical Appointment' }
 ];
 
 const EMPTY_FORM = {
@@ -18,13 +19,14 @@ const EMPTY_FORM = {
 };
 
 export default function AddReminderForm({ onAdd, onClose }) {
+  const { t } = useTranslation();
   const [form, setForm] = useState(EMPTY_FORM);
   const [errors, setErrors] = useState({});
 
   const validate = () => {
     const next = {};
-    if (!form.title.trim()) next.title = 'Please enter a reminder title.';
-    if (!form.time.trim()) next.time = 'Please choose a time.';
+    if (!form.title.trim()) next.title = t('reminders.enter_title', { defaultValue: 'Please enter a reminder title.' });
+    if (!form.time.trim()) next.time = t('reminders.choose_time', { defaultValue: 'Please choose a time.' });
     return next;
   };
 
@@ -35,6 +37,8 @@ export default function AddReminderForm({ onAdd, onClose }) {
       setErrors(errs);
       return;
     }
+
+    const typeConfig = REMINDER_TYPES[form.type] || REMINDER_TYPES.medicine;
 
     onAdd({
       id: `rem-${Date.now()}`,
@@ -51,8 +55,6 @@ export default function AddReminderForm({ onAdd, onClose }) {
     onClose();
   };
 
-  const typeConfig = REMINDER_TYPES[form.type] || REMINDER_TYPES.medicine;
-
   const inputBase =
     'w-full px-4 py-3 rounded-2xl border-2 text-lg font-semibold text-gray-900 bg-white outline-none transition focus:border-purple-500 focus:ring-2 focus:ring-purple-200';
 
@@ -68,15 +70,15 @@ export default function AddReminderForm({ onAdd, onClose }) {
         <div className="flex items-center justify-between p-6 sm:p-7 border-b-2 border-purple-100">
           <div>
             <h2 id="add-reminder-title" className="text-2xl sm:text-3xl font-extrabold text-gray-900">
-              Add New Reminder
+              {t('reminders.add_new', { defaultValue: 'Add New Reminder' })}
             </h2>
             <p className="text-base sm:text-lg text-gray-500 font-semibold">
-              Fill in the details below and tap "Save".
+              {t('reminders.add_new_desc', { defaultValue: 'Fill in the details below and tap "Save".' })}
             </p>
           </div>
           <button
             onClick={onClose}
-            aria-label="Close form"
+            aria-label={t('common.close', { defaultValue: 'Close' })}
             className="p-2.5 rounded-2xl hover:bg-gray-100 text-gray-500 transition cursor-pointer"
           >
             <X className="w-7 h-7" />
@@ -89,7 +91,7 @@ export default function AddReminderForm({ onAdd, onClose }) {
           <div className="space-y-2">
             <label className="flex items-center gap-2 text-lg font-extrabold text-gray-900">
               <Tag className="w-5 h-5 text-purple-600" />
-              Reminder Type
+              {t('reminders.type_label', { defaultValue: 'Reminder Type' })}
             </label>
             <div className="grid grid-cols-2 gap-3">
               {TYPE_OPTIONS.map((opt) => (
@@ -103,7 +105,7 @@ export default function AddReminderForm({ onAdd, onClose }) {
                       : 'bg-gray-50 border-gray-200 text-gray-700 hover:bg-purple-50 hover:border-purple-300'
                   }`}
                 >
-                  {opt.label}
+                  {opt.icon} {t(opt.labelKey, { defaultValue: opt.defaultLabel })}
                 </button>
               ))}
             </div>
@@ -113,14 +115,14 @@ export default function AddReminderForm({ onAdd, onClose }) {
           <div className="space-y-2">
             <label htmlFor="rem-title" className="flex items-center gap-2 text-lg font-extrabold text-gray-900">
               <AlignLeft className="w-5 h-5 text-purple-600" />
-              Title <span className="text-rose-500">*</span>
+              {t('reminders.title_label', { defaultValue: 'Title' })} <span className="text-rose-500">*</span>
             </label>
             <input
               id="rem-title"
               type="text"
               value={form.title}
               onChange={e => setForm(f => ({ ...f, title: e.target.value }))}
-              placeholder="e.g. Evening Blood Pressure Tablet"
+              placeholder={t('reminders.title_placeholder', { defaultValue: 'e.g. Evening Blood Pressure Tablet' })}
               className={`${inputBase} ${errors.title ? 'border-rose-400' : 'border-gray-200'}`}
             />
             {errors.title && (
@@ -132,13 +134,13 @@ export default function AddReminderForm({ onAdd, onClose }) {
           <div className="space-y-2">
             <label htmlFor="rem-desc" className="flex items-center gap-2 text-lg font-extrabold text-gray-900">
               <AlignLeft className="w-5 h-5 text-purple-600" />
-              Description (Optional)
+              {t('reminders.desc_label', { defaultValue: 'Description (Optional)' })}
             </label>
             <textarea
               id="rem-desc"
               value={form.description}
               onChange={e => setForm(f => ({ ...f, description: e.target.value }))}
-              placeholder="Extra notes or instructions..."
+              placeholder={t('reminders.desc_placeholder', { defaultValue: 'Extra notes or instructions...' })}
               rows={3}
               className={`${inputBase} resize-none`}
             />
@@ -149,7 +151,7 @@ export default function AddReminderForm({ onAdd, onClose }) {
             <div className="space-y-2">
               <label htmlFor="rem-date" className="flex items-center gap-2 text-lg font-extrabold text-gray-900">
                 <Calendar className="w-5 h-5 text-purple-600" />
-                Date
+                {t('reminders.date_label', { defaultValue: 'Date' })}
               </label>
               <input
                 id="rem-date"
@@ -163,7 +165,7 @@ export default function AddReminderForm({ onAdd, onClose }) {
             <div className="space-y-2">
               <label htmlFor="rem-time" className="flex items-center gap-2 text-lg font-extrabold text-gray-900">
                 <Clock className="w-5 h-5 text-purple-600" />
-                Time <span className="text-rose-500">*</span>
+                {t('reminders.time_label', { defaultValue: 'Time' })} <span className="text-rose-500">*</span>
               </label>
               <input
                 id="rem-time"
@@ -171,7 +173,6 @@ export default function AddReminderForm({ onAdd, onClose }) {
                 value={form.time.includes(':') && !form.time.includes('M')
                   ? form.time
                   : (() => {
-                      // Convert "09:00 AM" to "09:00"
                       try {
                         const d = new Date(`1970-01-01 ${form.time}`);
                         return isNaN(d) ? '09:00' : d.toTimeString().slice(0,5);
@@ -179,7 +180,6 @@ export default function AddReminderForm({ onAdd, onClose }) {
                     })()
                 }
                 onChange={e => {
-                  // Convert back to "HH:MM AM/PM"
                   try {
                     const [hh, mm] = e.target.value.split(':');
                     const d = new Date();
@@ -204,17 +204,17 @@ export default function AddReminderForm({ onAdd, onClose }) {
           <div className="flex flex-col sm:flex-row items-stretch gap-3 pt-2">
             <button
               type="submit"
-              className="senior-btn-primary flex items-center justify-center gap-2 py-4 text-xl font-extrabold flex-1"
+              className="senior-btn-primary flex items-center justify-center gap-2 py-4 text-xl font-extrabold flex-1 cursor-pointer"
             >
               <Plus className="w-6 h-6" />
-              Save Reminder
+              {t('reminders.save_reminder', { defaultValue: 'Save Reminder' })}
             </button>
             <button
               type="button"
               onClick={onClose}
               className="py-4 px-6 rounded-2xl bg-gray-100 hover:bg-gray-200 text-gray-700 font-extrabold text-xl border-2 border-gray-200 transition cursor-pointer"
             >
-              Cancel
+              {t('reminders.cancel', { defaultValue: 'Cancel' })}
             </button>
           </div>
         </form>

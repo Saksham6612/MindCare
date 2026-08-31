@@ -1,9 +1,12 @@
 import React, { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
 import { Mic, MicOff, Volume2, ArrowLeft, Sparkles, MessageSquare } from 'lucide-react';
 import { quickVoiceSuggestions } from '../data/mockData';
 
 export default function VoiceAssistant() {
+  const { t } = useTranslation();
+
   const [isListening, setIsListening] = useState(false);
   const [activeSpeechText, setActiveSpeechText] = useState("");
   const [assistantReply, setAssistantReply] = useState(
@@ -44,7 +47,7 @@ export default function VoiceAssistant() {
           className="inline-flex items-center gap-2 text-purple-700 font-bold text-base hover:underline mb-2"
         >
           <ArrowLeft className="w-5 h-5" />
-          <span>Back to Home</span>
+          <span>{t('voice.back_to_home')}</span>
         </Link>
         <h1 className="text-3xl sm:text-4xl font-extrabold text-gray-900">
           Voice Companion
@@ -60,7 +63,7 @@ export default function VoiceAssistant() {
         <div className="max-w-2xl mx-auto p-6 bg-purple-700 text-white rounded-3xl shadow-lg relative text-left">
           <div className="flex items-center gap-2 text-purple-200 text-sm font-bold uppercase tracking-wider mb-2">
             <Volume2 className="w-4 h-4" />
-            <span>MindCare Assistant</span>
+            <span>{t('voice.assistant_title')}</span>
           </div>
           <p className="text-xl sm:text-2xl font-bold leading-relaxed">
             "{assistantReply}"
@@ -71,7 +74,7 @@ export default function VoiceAssistant() {
         <div className="py-4 flex flex-col items-center">
           <button
             onClick={handleMicClick}
-            aria-label={isListening ? "Stop listening" : "Start speaking to assistant"}
+            aria-label={isListening ? t("voice.stop_listening") : t("voice.start_speaking")}
             className={`w-36 h-36 sm:w-44 sm:h-44 rounded-full flex items-center justify-center transition-all duration-300 shadow-2xl active:scale-95 cursor-pointer relative ${
               isListening
                 ? 'bg-red-600 text-white ring-12 ring-red-200 animate-pulse'
@@ -86,7 +89,7 @@ export default function VoiceAssistant() {
           </button>
 
           <p className="mt-5 text-xl sm:text-2xl font-extrabold text-purple-950">
-            {isListening ? "Listening... Speak now" : "Tap Microphone to Speak"}
+            {isListening ? t("voice.listening_status") : t("voice.tap_to_speak")}
           </p>
           {activeSpeechText && (
             <p className="mt-2 text-base sm:text-lg font-semibold text-gray-600 bg-white/80 px-4 py-1.5 rounded-full border border-purple-200">
@@ -98,7 +101,7 @@ export default function VoiceAssistant() {
         {/* Suggested Voice Phrases */}
         <div className="space-y-3 pt-4 border-t border-purple-200 max-w-2xl mx-auto">
           <span className="block text-base font-bold text-gray-700">
-            Or tap any common question below:
+            {t('voice.suggested_title')}
           </span>
           <div className="flex flex-wrap justify-center gap-3">
             {quickVoiceSuggestions.map((phrase, idx) => (

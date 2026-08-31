@@ -1,9 +1,11 @@
 import React from 'react';
 import { Sparkles, PhoneCall } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 import { useTimeOfDay } from '../../hooks/useTimeOfDay';
 
 export default function HomeHeader({ onOpenSOS }) {
   const { greeting, formattedDate } = useTimeOfDay();
+  const { t } = useTranslation();
 
   return (
     <header className="senior-card p-6 sm:p-7 bg-white border-2 border-purple-200 shadow-sm flex items-center justify-between gap-4">
@@ -29,11 +31,11 @@ export default function HomeHeader({ onOpenSOS }) {
         <div className="space-y-0.5">
           <div className="inline-flex items-center gap-1.5 px-3 py-0.5 rounded-full bg-purple-100/80 text-purple-900 font-bold text-xs sm:text-sm">
             <Sparkles className="w-3.5 h-3.5 text-purple-700" />
-            <span>{greeting.text}</span>
+            <span>{t(`greeting.${greeting.key}`) || greeting.text}</span>
           </div>
 
           <h1 className="text-2xl sm:text-3xl md:text-4xl font-extrabold text-gray-900 tracking-tight">
-            Amma
+            {t('home.amma')}
           </h1>
 
           <p className="text-sm sm:text-base font-semibold text-gray-500">
@@ -50,7 +52,7 @@ export default function HomeHeader({ onOpenSOS }) {
           className="senior-btn-sos px-4 py-2.5 sm:px-5 sm:py-3 flex items-center gap-2 rounded-2xl text-white font-extrabold text-sm sm:text-base transition shadow-md active:scale-95 cursor-pointer shrink-0"
         >
           <PhoneCall className="w-5 h-5 animate-pulse" />
-          <span className="hidden sm:inline">SOS Help</span>
+          <span className="hidden sm:inline">{t('home.sos_help')}</span>
         </button>
       )}
     </header>

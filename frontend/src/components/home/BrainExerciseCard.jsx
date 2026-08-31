@@ -1,8 +1,11 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { Brain, Clock, Zap, Play } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 
 export default function BrainExerciseCard() {
+  const { t } = useTranslation();
+
   return (
     <section 
       aria-label="Today's Brain Exercise"
@@ -18,23 +21,23 @@ export default function BrainExerciseCard() {
 
           <div className="space-y-2">
             <span className="text-xs sm:text-sm font-extrabold uppercase tracking-wider text-purple-800 bg-purple-100 px-3 py-1 rounded-full inline-block">
-              Today's Brain Exercise
+              {t('home.brain_exercise') || "Today's Brain Exercise"}
             </span>
 
             <h3 className="text-2xl sm:text-3xl font-extrabold text-gray-900 tracking-tight">
-              Memory Challenge
+              {t('home.memory_challenge') || "Memory Challenge"}
             </h3>
 
             {/* Badges: 5-7 min • Adaptive level */}
             <div className="flex flex-wrap items-center gap-3 pt-1 text-sm sm:text-base font-bold text-gray-700">
               <span className="flex items-center gap-1.5 bg-white border border-purple-200 px-3 py-1 rounded-xl shadow-2xs">
                 <Clock className="w-4 h-4 text-purple-600" />
-                5–7 min
+                5–7 {t('home.min', { defaultValue: 'min' })}
               </span>
 
               <span className="flex items-center gap-1.5 bg-white border border-purple-200 px-3 py-1 rounded-xl shadow-2xs">
                 <Zap className="w-4 h-4 text-amber-500 fill-amber-400" />
-                Adaptive level
+                {t('home.adaptive_level', { defaultValue: 'Adaptive level' })}
               </span>
             </div>
           </div>
@@ -46,7 +49,7 @@ export default function BrainExerciseCard() {
           className="senior-btn-primary py-4 px-8 sm:px-10 text-xl sm:text-2xl font-extrabold rounded-2xl flex items-center justify-center gap-3 shadow-lg active:scale-95 group shrink-0"
         >
           <Play className="w-6 h-6 sm:w-7 sm:h-7 fill-white group-hover:scale-110 transition" />
-          <span>Start Game</span>
+          <span>{t('home.start_game') || "Start Game"}</span>
         </Link>
       </div>
     </section>

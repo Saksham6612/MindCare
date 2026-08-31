@@ -1,5 +1,6 @@
 import React from 'react';
-import { Heart, PhoneCall, Type, Eye, Sparkles } from 'lucide-react';
+import { Heart, PhoneCall, Type, Eye, Sparkles, Languages } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 import { useTimeOfDay } from '../../hooks/useTimeOfDay';
 
 export default function Header({ 
@@ -10,6 +11,12 @@ export default function Header({
   onToggleContrast 
 }) {
   const { formattedTime, formattedDate } = useTimeOfDay();
+  const { t, i18n } = useTranslation();
+
+  const toggleLanguage = () => {
+    const newLang = i18n.language === 'en' ? 'as' : 'en';
+    i18n.changeLanguage(newLang);
+  };
 
   return (
     <header className="sticky top-0 z-40 bg-[#FAF7F2]/95 backdrop-blur-md border-b-2 border-[#EADBCE] shadow-xs px-4 sm:px-6 py-3.5 transition-colors">
@@ -22,14 +29,14 @@ export default function Header({
           <div>
             <div className="flex items-center gap-1.5">
               <span className="text-2xl sm:text-3xl font-extrabold tracking-tight text-purple-950 font-heading">
-                Mind<span className="text-purple-600">Care</span>
+                {t('header.mindcare') || 'MindCare'}
               </span>
               <span className="hidden md:inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-bold bg-purple-100 text-purple-800 border border-purple-200">
-                <Sparkles className="w-3 h-3" /> Senior Companion
+                <Sparkles className="w-3 h-3" /> {t('header.senior_companion')}
               </span>
             </div>
             <p className="text-xs sm:text-sm font-semibold text-gray-500 hidden sm:block">
-              Guwahati, Assam • SIH 2026
+              {t('header.location_sih')}
             </p>
           </div>
         </div>
@@ -55,7 +62,20 @@ export default function Header({
           >
             <Type className="w-4 h-4 sm:w-5 sm:h-5 text-purple-600" />
             <span className="uppercase text-xs tracking-wider">
-              {fontScale === 'extra-large' ? 'XL Text' : fontScale === 'large' ? 'Large Text' : 'Normal'}
+              {fontScale === 'extra-large' ? t('header.xl_text') : fontScale === 'large' ? t('header.large_text') : t('header.normal_text')}
+            </span>
+          </button>
+
+          {/* Language Toggle */}
+          <button
+            onClick={toggleLanguage}
+            title="Toggle Language"
+            aria-label="Toggle Language"
+            className="p-2.5 sm:px-3 sm:py-2.5 rounded-xl border-2 font-bold text-sm sm:text-base flex items-center gap-1.5 transition shadow-xs active:scale-95 bg-white hover:bg-purple-50 border-purple-200 text-gray-700"
+          >
+            <Languages className="w-5 h-5 text-purple-600" />
+            <span className="hidden md:inline text-xs uppercase tracking-wider">
+              {i18n.language === 'as' ? 'অসমীয়া' : 'English'}
             </span>
           </button>
 
@@ -72,7 +92,7 @@ export default function Header({
           >
             <Eye className="w-5 h-5 text-purple-600" />
             <span className="hidden md:inline text-xs uppercase tracking-wider">
-              {highContrast ? 'High Contrast: On' : 'Contrast'}
+              {highContrast ? t('header.high_contrast_on') : t('header.contrast')}
             </span>
           </button>
 
@@ -83,7 +103,7 @@ export default function Header({
             className="senior-btn-sos px-3.5 py-2 sm:px-4 sm:py-2.5 flex items-center gap-2 rounded-xl text-white font-extrabold text-sm sm:text-base transition shadow-md active:scale-95 cursor-pointer"
           >
             <PhoneCall className="w-5 h-5 animate-pulse" />
-            <span className="tracking-wide">SOS HELP</span>
+            <span className="tracking-wide">{t('header.sos_help')}</span>
           </button>
         </div>
       </div>

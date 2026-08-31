@@ -1,5 +1,6 @@
 import React from 'react';
 import { NavLink } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import { Home, Clock, Brain, User, Sparkles, Mic, HeartHandshake } from 'lucide-react';
 import { NAVIGATION_ITEMS } from '../../utils/constants';
 
@@ -14,6 +15,8 @@ const ICON_MAP = {
 };
 
 export default function Navbar() {
+  const { t } = useTranslation();
+
   return (
     <nav 
       aria-label="Main Navigation"
@@ -45,7 +48,7 @@ export default function Navbar() {
                   <span className={`text-xs sm:text-sm tracking-tight ${
                     isActive ? 'font-extrabold text-white' : 'font-semibold text-gray-700'
                   }`}>
-                    {item.label}
+                    {t(`nav.${item.label.toLowerCase()}`) || item.label}
                   </span>
                 </>
               )}

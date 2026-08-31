@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import {
   ArrowLeft, Plus, Sparkles, Pill, Droplets, Footprints, CalendarClock, Filter
@@ -6,6 +6,7 @@ import {
 import { todaysReminders, REMINDER_TYPES } from '../data/mockData';
 import ReminderCard from '../components/reminders/ReminderCard';
 import AddReminderForm from '../components/reminders/AddReminderForm';
+import { fetchTodayReminders } from '../api/api';
 
 const TYPE_FILTER_OPTIONS = [
   { value: 'all', label: 'All', icon: Filter },
@@ -21,6 +22,35 @@ export default function Reminders() {
   const [showForm, setShowForm] = useState(false);
 
   const today = new Date().toISOString().split('T')[0];
+
+  useEffect(() => {
+    let isMounted = true;
+    async function loadDbReminders() {
+      try {
+        const data = await fetchTodayReminders();
+        if (isMounted && data.success && data.reminders) {
+          const dbMapped = data.reminders.map((r) => ({
+            id: r.id,
+            title: r.title,
+            description: r.description || '',
+            type: r.type,
+            time: r.reminder_time,
+            date: r.reminder_date,
+            completed: Boolean(r.is_completed),
+          }));
+          if (dbMapped.length > 0) {
+            setReminders(dbMapped);
+          }
+        }
+      } catch (e) {
+        console.debug('Using initial mock reminders', e);
+      }
+    }
+    loadDbReminders();
+    return () => {
+      isMounted = false;
+    };
+  }, []);
 
   // Toggle completion status
   const handleToggleComplete = (id) => {

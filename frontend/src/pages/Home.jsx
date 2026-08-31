@@ -1,6 +1,7 @@
 import React from 'react';
 import HomeHeader from '../components/home/HomeHeader';
 import FeelingSection from '../components/home/FeelingSection';
+import VoiceAssistantBanner from '../components/home/VoiceAssistantBanner';
 import BrainExerciseCard from '../components/home/BrainExerciseCard';
 import MedicineCard from '../components/home/MedicineCard';
 import HydrationCard from '../components/home/HydrationCard';
@@ -14,13 +15,16 @@ export default function Home() {
       {/* 2. Feeling Section: How are you feeling today? (😊 Good, 😐 Okay, 😔 Not good) */}
       <FeelingSection />
 
-      {/* 3. Today's Brain Exercise Card: Memory Challenge, 5-7 min, Adaptive level, Start Game */}
+      {/* 3. AI Voice Assistant Quick Launch Banner */}
+      <VoiceAssistantBanner />
+
+      {/* 4. Today's Brain Exercise Card: Memory Challenge, 5-7 min, Adaptive level, Start Game */}
       <BrainExerciseCard />
 
-      {/* 4. Medicine Card: Morning Tablet, 10:00 AM, Mark as Taken */}
+      {/* 5. Medicine Card: Morning Tablet, 10:00 AM, Mark as Taken */}
       <MedicineCard />
 
-      {/* 5. Hydration Card: Drink Water, Next reminder time, Log Water */}
+      {/* 6. Hydration Card: Drink Water, Next reminder time, Log Water */}
       <HydrationCard />
     </div>
   );

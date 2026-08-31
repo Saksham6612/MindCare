@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import Header from '../components/common/Header';
 import Navbar from '../components/common/Navbar';
 import SOSModal from '../components/common/SOSModal';
+import ProactiveReminderModal from '../components/reminders/ProactiveReminderModal';
 import { useAccessibility } from '../hooks/useAccessibility';
 
 export default function PatientLayout({ children }) {
@@ -37,6 +38,9 @@ export default function PatientLayout({ children }) {
         isOpen={isSOSOpen} 
         onClose={() => setIsSOSOpen(false)} 
       />
+
+      {/* Proactive Due Reminder Notification Modal */}
+      <ProactiveReminderModal />
     </div>
   );
 }

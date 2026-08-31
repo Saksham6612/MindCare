@@ -2,8 +2,24 @@
 
 const { Router } = require('express');
 const { pool } = require('../config/database');
+const authRoutes = require('./auth.routes');
+const reminderRoutes = require('./reminder.routes');
+const progressRoutes = require('./progress.routes');
+const activityRoutes = require('./activity.routes');
 
 const router = Router();
+
+// ── Auth routes ─────────────────────────────────────────────────────────────
+router.use('/auth', authRoutes);
+
+// ── Reminder routes ─────────────────────────────────────────────────────────
+router.use('/reminders', reminderRoutes);
+
+// ── Progress routes ─────────────────────────────────────────────────────────
+router.use('/progress', progressRoutes);
+
+// ── Activity routes ─────────────────────────────────────────────────────────
+router.use('/activity', activityRoutes);
 
 // GET /api/health
 router.get('/health', (_req, res) => {

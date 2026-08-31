@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import {
-  ArrowLeft, Brain, Eye, Shapes, Pill, Activity, ShieldCheck,
-  MapPin, Phone, CalendarClock, User, AlertTriangle, CheckSquare
+  ArrowLeft, Brain, Eye, Shapes, ShieldCheck,
+  MapPin, Phone, CalendarClock, AlertTriangle, CheckSquare
 } from 'lucide-react';
 import StatCard from '../components/caregiver/StatCard';
 import PerformanceChart from '../components/caregiver/PerformanceChart';
@@ -17,15 +17,21 @@ import {
   caregiverAlerts,
   gamesCompletedThisWeek
 } from '../data/caregiverData';
+import { useLanguage } from '../context/LanguageContext';
 
 export default function CaregiverDashboard() {
   const [alerts, setAlerts] = useState(caregiverAlerts);
   const activeAlerts = alerts.filter(a => !a.resolved);
   const patient = caregiverPatient;
+  const { t, language } = useLanguage();
 
   const dismissAlert = (id) => {
     setAlerts(prev => prev.map(a => a.id === id ? { ...a, resolved: true } : a));
   };
+
+  const formattedCurrentDate = new Date().toLocaleDateString(language === 'bn' ? 'bn-IN' : 'en-IN', {
+    weekday: 'long', day: 'numeric', month: 'long', year: 'numeric'
+  });
 
   return (
     <div className="space-y-6 sm:space-y-8 max-w-6xl mx-auto animate-in fade-in duration-300">
@@ -35,13 +41,13 @@ export default function CaregiverDashboard() {
         <div>
           <Link to="/" className="inline-flex items-center gap-2 text-purple-700 font-bold text-sm hover:underline mb-1">
             <ArrowLeft className="w-4 h-4" />
-            Patient App Home
+            {t('caregiver.backToPatient')}
           </Link>
           <h1 className="text-2xl sm:text-3xl lg:text-4xl font-extrabold text-gray-900 tracking-tight">
-            Caregiver Dashboard
+            {t('caregiver.dashboardTitle')}
           </h1>
           <p className="text-sm sm:text-base font-semibold text-gray-500">
-            Monitoring {patient.name} · {new Date().toLocaleDateString('en-IN', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' })}
+            {t('caregiver.monitoring', { name: patient.name })} · {formattedCurrentDate}
           </p>
         </div>
 
@@ -49,7 +55,7 @@ export default function CaregiverDashboard() {
           <div className="flex items-center gap-2 bg-amber-50 border-2 border-amber-300 px-4 py-2.5 rounded-2xl self-start sm:self-auto">
             <AlertTriangle className="w-5 h-5 text-amber-700 shrink-0" />
             <span className="font-extrabold text-amber-900">
-              {activeAlerts.length} Active Alert{activeAlerts.length > 1 ? 's' : ''}
+              {t('caregiver.activeAlerts', { count: activeAlerts.length, plural: activeAlerts.length > 1 ? 's' : '' })}
             </span>
           </div>
         )}
@@ -67,7 +73,7 @@ export default function CaregiverDashboard() {
               <h2 className="text-xl sm:text-2xl font-extrabold text-gray-900">{patient.name}</h2>
               <div className="flex flex-wrap items-center gap-2 mt-1">
                 <span className="text-xs font-bold bg-purple-100 text-purple-900 px-2.5 py-0.5 rounded-full border border-purple-200">
-                  Age {patient.age}
+                  {t('ageLabel')} {patient.age}
                 </span>
                 <span className="text-xs font-bold bg-blue-100 text-blue-900 px-2.5 py-0.5 rounded-full border border-blue-200">
                   {patient.diagnosis}
@@ -86,7 +92,9 @@ export default function CaregiverDashboard() {
           {/* Key info columns */}
           <div className="grid grid-cols-2 sm:grid-cols-3 gap-4 flex-1">
             <div>
-              <p className="text-xs font-extrabold uppercase text-gray-400 tracking-wider mb-0.5">Caregiver</p>
+              <p className="text-xs font-extrabold uppercase text-gray-400 tracking-wider mb-0.5">
+                {t('caregiver.caregiverLabel')}
+              </p>
               <p className="text-sm sm:text-base font-bold text-gray-900">{patient.primaryCaregiver.name}</p>
               <p className="text-xs font-semibold text-gray-500">{patient.primaryCaregiver.relation}</p>
               <a href={`tel:${patient.primaryCaregiver.phone}`} className="text-xs font-bold text-purple-700 hover:underline flex items-center gap-1 mt-0.5">
@@ -94,18 +102,24 @@ export default function CaregiverDashboard() {
               </a>
             </div>
             <div>
-              <p className="text-xs font-extrabold uppercase text-gray-400 tracking-wider mb-0.5">Physician</p>
+              <p className="text-xs font-extrabold uppercase text-gray-400 tracking-wider mb-0.5">
+                {t('caregiver.physicianLabel')}
+              </p>
               <p className="text-sm sm:text-base font-bold text-gray-900">{patient.physician.name}</p>
               <p className="text-xs font-semibold text-gray-500">{patient.physician.specialty}</p>
               <p className="text-xs font-bold text-gray-600">{patient.physician.hospital}</p>
             </div>
             <div>
-              <p className="text-xs font-extrabold uppercase text-gray-400 tracking-wider mb-0.5">Next Appointment</p>
+              <p className="text-xs font-extrabold uppercase text-gray-400 tracking-wider mb-0.5">
+                {t('caregiver.nextAppointmentLabel')}
+              </p>
               <div className="flex items-center gap-1.5 mt-1">
                 <CalendarClock className="w-4 h-4 text-purple-600 shrink-0" />
                 <p className="text-sm sm:text-base font-extrabold text-purple-900">{patient.physician.nextAppointment}</p>
               </div>
-              <p className="text-xs font-semibold text-gray-500 mt-0.5">Last check-in: {patient.primaryCaregiver.lastCheckIn}</p>
+              <p className="text-xs font-semibold text-gray-500 mt-0.5">
+                {t('caregiver.lastCheckIn', { time: patient.primaryCaregiver.lastCheckIn })}
+              </p>
             </div>
           </div>
 
@@ -113,8 +127,8 @@ export default function CaregiverDashboard() {
           <div className="flex items-center gap-2 bg-emerald-50 border-2 border-emerald-300 px-4 py-3 rounded-2xl self-start lg:self-auto shrink-0">
             <ShieldCheck className="w-6 h-6 text-emerald-700" />
             <div>
-              <p className="text-xs font-extrabold uppercase text-emerald-800">Status</p>
-              <p className="text-base font-black text-gray-900">Safe & Connected</p>
+              <p className="text-xs font-extrabold uppercase text-emerald-800">{t('caregiver.statusLabel')}</p>
+              <p className="text-base font-black text-gray-900">{t('caregiver.safeConnected')}</p>
             </div>
           </div>
         </div>
@@ -123,19 +137,19 @@ export default function CaregiverDashboard() {
       {/* ── Cognitive Performance Stats (3 cards) ── */}
       <div>
         <h2 className="text-base sm:text-lg font-extrabold text-gray-700 uppercase tracking-wider mb-3">
-          Cognitive Performance This Week
+          {t('caregiver.cognitivePerformance')}
         </h2>
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 sm:gap-5">
           {[
-            { key: 'memory', Icon: Brain, iconBg: 'bg-purple-100', iconColor: 'text-purple-700', border: 'border-purple-200' },
-            { key: 'attention', Icon: Eye, iconBg: 'bg-sky-100', iconColor: 'text-sky-700', border: 'border-sky-200' },
-            { key: 'pattern', Icon: Shapes, iconBg: 'bg-emerald-100', iconColor: 'text-emerald-700', border: 'border-emerald-200' }
-          ].map(({ key, Icon, iconBg, iconColor, border }) => {
+            { key: 'memory', labelKey: 'caregiver.statMemory', Icon: Brain, iconBg: 'bg-purple-100', iconColor: 'text-purple-700', border: 'border-purple-200' },
+            { key: 'attention', labelKey: 'caregiver.statAttention', Icon: Eye, iconBg: 'bg-sky-100', iconColor: 'text-sky-700', border: 'border-sky-200' },
+            { key: 'pattern', labelKey: 'caregiver.statPattern', Icon: Shapes, iconBg: 'bg-emerald-100', iconColor: 'text-emerald-700', border: 'border-emerald-200' }
+          ].map(({ key, labelKey, Icon, iconBg, iconColor, border }) => {
             const stat = cognitiveStats[key];
             return (
               <StatCard
                 key={key}
-                label={stat.label}
+                label={t(labelKey)}
                 value={`${stat.score}%`}
                 subtitle={stat.description}
                 icon={Icon}
@@ -145,8 +159,8 @@ export default function CaregiverDashboard() {
                 borderColor={border}
               >
                 <div className="flex items-center justify-between text-xs font-bold text-gray-500">
-                  <span>Level: <span className="text-gray-800">{stat.level}</span></span>
-                  <span>{stat.sessions} sessions</span>
+                  <span>{t('caregiver.statLevel')}: <span className="text-gray-800">{stat.level}</span></span>
+                  <span>{t('caregiver.statSessions', { count: stat.sessions })}</span>
                 </div>
                 {/* Score bar */}
                 <div className="w-full bg-gray-100 rounded-full h-2 overflow-hidden mt-1">
@@ -172,10 +186,10 @@ export default function CaregiverDashboard() {
         <div className="bg-white rounded-2xl border-2 border-gray-200 shadow-sm p-5 sm:p-6 space-y-4">
           <div className="border-b border-gray-100 pb-3">
             <h3 className="text-lg sm:text-xl font-extrabold text-gray-900 tracking-tight">
-              Games Completed This Week
+              {t('caregiver.gamesCompleted')}
             </h3>
             <p className="text-sm font-semibold text-gray-500">
-              Sessions completed out of 7 days
+              {t('caregiver.sessionsCompletedSub')}
             </p>
           </div>
 
@@ -183,15 +197,16 @@ export default function CaregiverDashboard() {
             {gamesCompletedThisWeek.map((g) => {
               const pct = Math.round((g.completed / g.total) * 100);
               const barColor = g.game === 'Memory' ? 'bg-purple-600' : g.game === 'Attention' ? 'bg-sky-500' : 'bg-emerald-500';
+              const localizedGameName = g.game === 'Memory' ? t('caregiver.statMemory') : g.game === 'Attention' ? t('caregiver.statAttention') : t('caregiver.statPattern');
 
               return (
                 <div key={g.game} className="space-y-1.5">
                   <div className="flex items-center justify-between text-sm font-bold text-gray-700">
-                    <span>{g.game}</span>
+                    <span>{localizedGameName}</span>
                     <div className="flex items-center gap-3">
-                      <span className="text-gray-500">{g.completed}/{g.total} days</span>
+                      <span className="text-gray-500">{g.completed}/{g.total} {t('daysLabel')}</span>
                       <span className="text-xs bg-gray-100 text-gray-700 px-2 py-0.5 rounded-lg">
-                        Avg {g.avgScore}%
+                        {t('avgLabel')} {g.avgScore}%
                       </span>
                     </div>
                   </div>
@@ -205,19 +220,19 @@ export default function CaregiverDashboard() {
 
           <div className="pt-2 grid grid-cols-3 gap-2">
             <StatCard
-              label="Total Sessions"
+              label={t('caregiver.totalSessions')}
               value={gamesCompletedThisWeek.reduce((s, g) => s + g.completed, 0)}
               iconBg="bg-purple-100"
               iconColor="text-purple-700"
             />
             <StatCard
-              label="Best Avg Score"
+              label={t('caregiver.bestAvgScore')}
               value={`${Math.max(...gamesCompletedThisWeek.map(g => g.avgScore))}%`}
               iconBg="bg-emerald-100"
               iconColor="text-emerald-700"
             />
             <StatCard
-              label="Days Active"
+              label={t('caregiver.daysActive')}
               value="7 / 7"
               iconBg="bg-amber-100"
               iconColor="text-amber-700"
@@ -230,15 +245,15 @@ export default function CaregiverDashboard() {
           <div className="border-b border-gray-100 pb-3 flex items-center justify-between">
             <div>
               <h3 className="text-lg sm:text-xl font-extrabold text-gray-900 tracking-tight">
-                Medication Adherence
+                {t('caregiver.medicationAdherence')}
               </h3>
               <p className="text-sm font-semibold text-gray-500">
-                3 daily medications tracked
+                {t('caregiver.medicationsTracked')}
               </p>
             </div>
             <div className="text-right">
               <p className="text-3xl font-black text-purple-900">{medicationAdherence.overall}%</p>
-              <p className="text-xs font-bold text-emerald-700">Overall this week</p>
+              <p className="text-xs font-bold text-emerald-700">{t('caregiver.overallThisWeek')}</p>
             </div>
           </div>
 
@@ -267,7 +282,7 @@ export default function CaregiverDashboard() {
 
           {/* Daily dots */}
           <div className="pt-1">
-            <p className="text-xs font-extrabold uppercase text-gray-400 tracking-wider mb-2">This Week — Daily Doses</p>
+            <p className="text-xs font-extrabold uppercase text-gray-400 tracking-wider mb-2">{t('caregiver.dailyDoses')}</p>
             <div className="flex justify-between">
               {medicationAdherence.weeklyData.map((day) => {
                 const perfect = day.taken === day.total;
@@ -296,11 +311,11 @@ export default function CaregiverDashboard() {
         <div className="space-y-4">
           <div className="flex items-center justify-between">
             <h2 className="text-base sm:text-lg font-extrabold text-gray-700 uppercase tracking-wider">
-              Alerts ({activeAlerts.length} active)
+              {t('caregiver.alertsTitle', { count: activeAlerts.length })}
             </h2>
             {alerts.some(a => a.resolved) && (
               <span className="text-xs font-bold text-gray-400">
-                {alerts.filter(a => a.resolved).length} resolved
+                {t('caregiver.resolvedCount', { count: alerts.filter(a => a.resolved).length })}
               </span>
             )}
           </div>
@@ -315,7 +330,7 @@ export default function CaregiverDashboard() {
           ) : (
             <div className="bg-emerald-50 rounded-2xl border-2 border-emerald-200 p-6 text-center">
               <CheckSquare className="w-8 h-8 text-emerald-600 mx-auto mb-2" />
-              <p className="font-bold text-emerald-900">No active alerts. Everything looks good!</p>
+              <p className="font-bold text-emerald-900">{t('caregiver.noAlerts')}</p>
             </div>
           )}
         </div>

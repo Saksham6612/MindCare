@@ -1,9 +1,11 @@
 import { useEffect, useState } from "react";
 import { checkBackend, checkDatabase } from "../api/api";
+import { useLanguage } from "../context/LanguageContext";
 
 export default function BackendStatus() {
   const [backend, setBackend] = useState("checking");
   const [database, setDatabase] = useState("checking");
+  const { t } = useLanguage();
 
   useEffect(() => {
     async function testConnection() {
@@ -42,35 +44,35 @@ export default function BackendStatus() {
   return (
     <div className="p-6 rounded-2xl bg-gray-900 border border-gray-800">
       <h2 className="text-xl font-semibold text-white mb-4">
-        System Status
+        {t('systemStatus.title')}
       </h2>
 
       <div className="space-y-3">
         <div className="flex justify-between">
           <span className="text-gray-300">
-            Backend API
+            {t('systemStatus.backendApi')}
           </span>
 
           <span className={statusStyle(backend)}>
             {backend === "connected"
-              ? "● Connected"
+              ? t('systemStatus.connected')
               : backend === "error"
-              ? "● Error"
-              : "● Checking..."}
+              ? t('systemStatus.error')
+              : t('systemStatus.checking')}
           </span>
         </div>
 
         <div className="flex justify-between">
           <span className="text-gray-300">
-            PostgreSQL Database
+            {t('systemStatus.postgresDb')}
           </span>
 
           <span className={statusStyle(database)}>
             {database === "connected"
-              ? "● Connected"
+              ? t('systemStatus.connected')
               : database === "error"
-              ? "● Error"
-              : "● Checking..."}
+              ? t('systemStatus.error')
+              : t('systemStatus.checking')}
           </span>
         </div>
       </div>

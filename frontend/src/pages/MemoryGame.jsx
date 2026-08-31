@@ -5,6 +5,7 @@ import MemorizeStep from '../components/games/memory/MemorizeStep';
 import RecallStep from '../components/games/memory/RecallStep';
 import ResultsStep from '../components/games/memory/ResultsStep';
 import { evaluateAdaptiveDifficulty, DIFFICULTY_CONFIG } from '../utils/adaptiveDifficulty';
+import { useLanguage } from '../context/LanguageContext';
 
 const ALL_OBJECTS_POOL = [
   { id: 'tea', name: 'Assam Tea', emoji: '🍵' },
@@ -22,6 +23,8 @@ const ALL_OBJECTS_POOL = [
 ];
 
 export default function MemoryGame() {
+  const { t } = useLanguage();
+
   // Adaptive Difficulty State
   const [currentDifficulty, setCurrentDifficulty] = useState(() => {
     return localStorage.getItem('mindcare_memory_difficulty') || 'Easy';
@@ -47,6 +50,8 @@ export default function MemoryGame() {
     extraItems: [],
     responseTime: 0,
     recommendation: '',
+    recommendationKey: 'maintained',
+    recommendationParams: {},
     nextDifficulty: 'Easy',
     adaptiveStatus: 'maintained'
   });
@@ -59,7 +64,7 @@ export default function MemoryGame() {
     // Shuffle pool
     const shuffledPool = [...ALL_OBJECTS_POOL].sort(() => 0.5 - Math.random());
     
-    // Pick targets according to difficulty config (e.g. 6 for Easy, 7 for Medium, 8 for Hard)
+    // Pick targets according to difficulty config
     const targets = shuffledPool.slice(0, config.targetCount);
     
     // Pick distractors
@@ -101,7 +106,7 @@ export default function MemoryGame() {
     const accuracyPct = Math.round((score / targetObjects.length) * 100);
 
     // Run Adaptive Engine Evaluation
-    const { nextDifficulty, recommendation, status } = evaluateAdaptiveDifficulty({
+    const { nextDifficulty, recommendation, recommendationKey, recommendationParams, status } = evaluateAdaptiveDifficulty({
       accuracy: accuracyPct,
       responseTime,
       currentDifficulty,
@@ -130,6 +135,8 @@ export default function MemoryGame() {
       extraItems: extra,
       responseTime,
       recommendation,
+      recommendationKey,
+      recommendationParams,
       nextDifficulty,
       adaptiveStatus: status
     });
@@ -145,6 +152,7 @@ export default function MemoryGame() {
   };
 
   const currentConfig = DIFFICULTY_CONFIG[currentDifficulty] || DIFFICULTY_CONFIG.Easy;
+  const translatedDifficulty = t(`difficulty.${currentDifficulty.toLowerCase()}`) || currentDifficulty;
 
   return (
     <div className="space-y-6 sm:space-y-7 max-w-4xl mx-auto animate-in fade-in duration-300">
@@ -156,19 +164,19 @@ export default function MemoryGame() {
             className="inline-flex items-center gap-2 text-purple-700 font-bold text-base hover:underline mb-1"
           >
             <ArrowLeft className="w-5 h-5" />
-            <span>Back to All Games</span>
+            <span>{t('memoryGame.backToGames')}</span>
           </Link>
           <h1 className="text-3xl sm:text-4xl font-extrabold text-gray-900 tracking-tight flex items-center gap-3">
-            <span>Memory Challenge</span>
+            <span>{t('memoryGame.title')}</span>
             <span className="text-xs font-black uppercase tracking-wider text-purple-800 bg-purple-100 px-3 py-1 rounded-full border border-purple-200">
-              {currentDifficulty} Level
+              {t('memoryGame.levelBadge', { level: translatedDifficulty })}
             </span>
           </h1>
         </div>
 
         <div className="flex items-center gap-2 text-sm sm:text-base font-bold text-gray-600 bg-white border-2 border-purple-200 px-4 py-2 rounded-2xl self-start sm:self-auto shadow-2xs">
           <Brain className="w-5 h-5 text-purple-600" />
-          <span>Adaptive Cognitive Engine</span>
+          <span>{t('memoryGame.adaptiveEngine')}</span>
         </div>
       </div>
 
@@ -200,6 +208,8 @@ export default function MemoryGame() {
           extraItems={resultsData.extraItems}
           responseTime={resultsData.responseTime}
           recommendation={resultsData.recommendation}
+          recommendationKey={resultsData.recommendationKey}
+          recommendationParams={resultsData.recommendationParams}
           nextDifficulty={resultsData.nextDifficulty}
           currentDifficulty={currentDifficulty}
           adaptiveStatus={resultsData.adaptiveStatus}

@@ -1,9 +1,11 @@
 import React from 'react';
 import { Sparkles, PhoneCall } from 'lucide-react';
 import { useTimeOfDay } from '../../hooks/useTimeOfDay';
+import { useLanguage } from '../../context/LanguageContext';
 
 export default function HomeHeader({ onOpenSOS }) {
   const { greeting, formattedDate } = useTimeOfDay();
+  const { t } = useLanguage();
 
   return (
     <header className="senior-card p-6 sm:p-7 bg-white border-2 border-purple-200 shadow-sm flex items-center justify-between gap-4">
@@ -22,7 +24,7 @@ export default function HomeHeader({ onOpenSOS }) {
               }}
             />
           </div>
-          <span className="absolute bottom-0 right-0 w-5 h-5 bg-emerald-500 border-2 border-white rounded-full" title="Connected" />
+          <span className="absolute bottom-0 right-0 w-5 h-5 bg-emerald-500 border-2 border-white rounded-full" title={t('header.connected')} />
         </div>
 
         {/* Name & Time greeting */}
@@ -33,7 +35,7 @@ export default function HomeHeader({ onOpenSOS }) {
           </div>
 
           <h1 className="text-2xl sm:text-3xl md:text-4xl font-extrabold text-gray-900 tracking-tight">
-            Amma
+            {t('home.patientName')}
           </h1>
 
           <p className="text-sm sm:text-base font-semibold text-gray-500">
@@ -46,11 +48,11 @@ export default function HomeHeader({ onOpenSOS }) {
       {onOpenSOS && (
         <button
           onClick={onOpenSOS}
-          aria-label="Open Emergency Help Contacts"
+          aria-label={t('header.sosHelpAria')}
           className="senior-btn-sos px-4 py-2.5 sm:px-5 sm:py-3 flex items-center gap-2 rounded-2xl text-white font-extrabold text-sm sm:text-base transition shadow-md active:scale-95 cursor-pointer shrink-0"
         >
           <PhoneCall className="w-5 h-5 animate-pulse" />
-          <span className="hidden sm:inline">SOS Help</span>
+          <span className="hidden sm:inline">{t('header.sosHelp')}</span>
         </button>
       )}
     </header>

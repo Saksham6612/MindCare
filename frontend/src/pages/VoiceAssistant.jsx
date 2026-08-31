@@ -1,23 +1,42 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { Mic, MicOff, Volume2, ArrowLeft, Sparkles, MessageSquare } from 'lucide-react';
-import { quickVoiceSuggestions } from '../data/mockData';
+import { Mic, Volume2, ArrowLeft } from 'lucide-react';
+import { useLanguage } from '../context/LanguageContext';
+
+const VOICE_SUGGESTIONS_EN = [
+  "What medicine do I need to take next?",
+  "Tell me what day and time it is today.",
+  "Call my daughter Priya.",
+  "Show me photos of grandson Aarav.",
+  "What is my next reminder?"
+];
+
+const VOICE_SUGGESTIONS_BN = [
+  "আমার পরবর্তী ওষুধ কী খেতে হবে?",
+  "আজকে কী বার এবং এখন কয়টা বাজে?",
+  "আমার মেয়ে প্রিয়াকে ফোন করো।",
+  "নাতি আরভের ছবি দেখাও।",
+  "আমার পরবর্তী অনুস্মারক কী?"
+];
 
 export default function VoiceAssistant() {
+  const { t, isBengali } = useLanguage();
   const [isListening, setIsListening] = useState(false);
   const [activeSpeechText, setActiveSpeechText] = useState("");
-  const [assistantReply, setAssistantReply] = useState(
-    "Hello Dadu! I am your MindCare voice assistant. How can I help you right now?"
-  );
+  const [assistantReply, setAssistantReply] = useState("");
+
+  useEffect(() => {
+    setAssistantReply(t('voice.initialGreeting'));
+  }, [t]);
 
   const handleMicClick = () => {
     if (!isListening) {
       setIsListening(true);
-      setActiveSpeechText("Listening to you in English or Assamese...");
+      setActiveSpeechText(t('voice.listeningPrompt'));
       setTimeout(() => {
         setIsListening(false);
-        setActiveSpeechText("You asked: 'What is my next reminder?'");
-        setAssistantReply("Your next reminder is at 10:30 AM: Enjoy your warm cup of Assam tea with two Marie biscuits.");
+        setActiveSpeechText(t('voice.listeningFeedback'));
+        setAssistantReply(t('voice.reminderResponse'));
       }, 3500);
     } else {
       setIsListening(false);
@@ -25,15 +44,19 @@ export default function VoiceAssistant() {
   };
 
   const handleSuggestionClick = (phrase) => {
-    setActiveSpeechText(`You asked: "${phrase}"`);
-    if (phrase.includes("medicine")) {
-      setAssistantReply("You have already taken your Blood Pressure medicine at 8:30 AM. Your next medicine is at 1:00 PM (Lunch Joint Care).");
-    } else if (phrase.includes("Priya")) {
-      setAssistantReply("Connecting you to your daughter Priya Hazarika (+91 98640 12345)...");
+    setActiveSpeechText(isBengali ? `আপনি জিজ্ঞাসা করেছেন: "${phrase}"` : `You asked: "${phrase}"`);
+    if (phrase.includes("medicine") || phrase.includes("ওষুধ")) {
+      setAssistantReply(t('voice.medicineResponse'));
+    } else if (phrase.includes("Priya") || phrase.includes("প্রিয়া")) {
+      setAssistantReply(t('voice.callPriyaResponse'));
+    } else if (phrase.includes("reminder") || phrase.includes("অনুস্মারক")) {
+      setAssistantReply(t('voice.reminderResponse'));
     } else {
-      setAssistantReply(`I heard your request: "${phrase}". Everything is set and peaceful.`);
+      setAssistantReply(t('voice.generalResponse', { phrase }));
     }
   };
+
+  const suggestions = isBengali ? VOICE_SUGGESTIONS_BN : VOICE_SUGGESTIONS_EN;
 
   return (
     <div className="space-y-6 sm:space-y-8 animate-in fade-in duration-300">
@@ -44,13 +67,13 @@ export default function VoiceAssistant() {
           className="inline-flex items-center gap-2 text-purple-700 font-bold text-base hover:underline mb-2"
         >
           <ArrowLeft className="w-5 h-5" />
-          <span>Back to Home</span>
+          <span>{t('voice.backToHome')}</span>
         </Link>
         <h1 className="text-3xl sm:text-4xl font-extrabold text-gray-900">
-          Voice Companion
+          {t('voice.title')}
         </h1>
         <p className="text-lg sm:text-xl text-gray-600 font-medium">
-          Tap the big purple microphone below and speak naturally.
+          {t('voice.subtitle')}
         </p>
       </div>
 
@@ -60,7 +83,7 @@ export default function VoiceAssistant() {
         <div className="max-w-2xl mx-auto p-6 bg-purple-700 text-white rounded-3xl shadow-lg relative text-left">
           <div className="flex items-center gap-2 text-purple-200 text-sm font-bold uppercase tracking-wider mb-2">
             <Volume2 className="w-4 h-4" />
-            <span>MindCare Assistant</span>
+            <span>{t('voice.assistantTitle')}</span>
           </div>
           <p className="text-xl sm:text-2xl font-bold leading-relaxed">
             "{assistantReply}"
@@ -86,7 +109,7 @@ export default function VoiceAssistant() {
           </button>
 
           <p className="mt-5 text-xl sm:text-2xl font-extrabold text-purple-950">
-            {isListening ? "Listening... Speak now" : "Tap Microphone to Speak"}
+            {isListening ? t('voice.listeningNow') : t('voice.tapToSpeak')}
           </p>
           {activeSpeechText && (
             <p className="mt-2 text-base sm:text-lg font-semibold text-gray-600 bg-white/80 px-4 py-1.5 rounded-full border border-purple-200">
@@ -98,14 +121,14 @@ export default function VoiceAssistant() {
         {/* Suggested Voice Phrases */}
         <div className="space-y-3 pt-4 border-t border-purple-200 max-w-2xl mx-auto">
           <span className="block text-base font-bold text-gray-700">
-            Or tap any common question below:
+            {t('voice.suggestionsHeader')}
           </span>
           <div className="flex flex-wrap justify-center gap-3">
-            {quickVoiceSuggestions.map((phrase, idx) => (
+            {suggestions.map((phrase, idx) => (
               <button
                 key={idx}
                 onClick={() => handleSuggestionClick(phrase)}
-                className="bg-white hover:bg-purple-100 border-2 border-purple-200 text-purple-900 font-bold text-base sm:text-lg px-4 py-2.5 rounded-2xl transition shadow-2xs text-left"
+                className="bg-white hover:bg-purple-100 border-2 border-purple-200 text-purple-900 font-bold text-base sm:text-lg px-4 py-2.5 rounded-2xl transition shadow-2xs text-left cursor-pointer"
               >
                 "{phrase}"
               </button>

@@ -62,7 +62,9 @@ export const todaysReminders = [
   {
     id: "rem-1",
     title: "Morning Blood Pressure Tablet",
+    title_bn: "সকালের রক্তচাপের ট্যাবলেট",
     description: "Take Amlodipine 5mg with a full glass of warm water after light breakfast.",
+    description_bn: "হালকা সকালের নাস্তার পর এক গ্লাস হালকা গরম জল দিয়ে অ্যামলোডিপিন ৫ মিগ্রা নিন।",
     date: new Date().toISOString().split("T")[0],
     time: "08:30 AM",
     type: "medicine",
@@ -71,7 +73,9 @@ export const todaysReminders = [
   {
     id: "rem-2",
     title: "Drink Water & Warm Tea",
+    title_bn: "জল পান ও গরম চা",
     description: "Enjoy a cup of warm Assam tea and drink at least 2 glasses of water.",
+    description_bn: "এক কাপ গরম আসাম চা পান করুন এবং কমপক্ষে ২ গ্লাস জল পান করুন।",
     date: new Date().toISOString().split("T")[0],
     time: "10:30 AM",
     type: "hydration",
@@ -80,7 +84,9 @@ export const todaysReminders = [
   {
     id: "rem-3",
     title: "Calcium Tablet with Lunch",
+    title_bn: "দুপুরের খাবারে ক্যালসিয়াম ট্যাবলেট",
     description: "Take 1 Calcium tablet after warm rice, dal, and boiled vegetables.",
+    description_bn: "গরম ভাত, ডাল এবং সিদ্ধ সবজি খাওয়ার পর ১টি ক্যালসিয়াম ট্যাবলেট নিন।",
     date: new Date().toISOString().split("T")[0],
     time: "01:00 PM",
     type: "medicine",
@@ -89,7 +95,9 @@ export const todaysReminders = [
   {
     id: "rem-4",
     title: "Gentle Verandah Walk",
+    title_bn: "বারান্দায় মৃদু হাঁটাহাঁটি",
     description: "15 minutes of slow walking in the garden or verandah for joint health.",
+    description_bn: "জয়েন্টের স্বাস্থ্যের জন্য বাগানে বা বারান্দায় ১৫ মিনিট ধীরে হাঁটুন।",
     date: new Date().toISOString().split("T")[0],
     time: "05:00 PM",
     type: "activity",
@@ -98,7 +106,9 @@ export const todaysReminders = [
   {
     id: "rem-5",
     title: "Neurology Check-up",
+    title_bn: "নিউরোলজি পরীক্ষা",
     description: "Visit Dr. Samarjit Baruah at Guwahati Neurological Clinic. Bring previous reports.",
+    description_bn: "গুয়াহাটি নিউরোলজিক্যাল ক্লিনিকে ডা. সমরজিৎ বড়ুয়াকে দেখান। আগের রিপোর্টগুলো নিয়ে যান।",
     date: new Date().toISOString().split("T")[0],
     time: "11:00 AM",
     type: "appointment",
@@ -107,7 +117,9 @@ export const todaysReminders = [
   {
     id: "rem-6",
     title: "Night Memory Medicine",
+    title_bn: "রাতের স্মৃতি ওষুধ",
     description: "Take Donepezil 5mg tablet with warm water before going to bed.",
+    description_bn: "শুতে যাওয়ার আগে গরম জল দিয়ে ডোনেপেজিল ৫ মিগ্রা ট্যাবলেট নিন।",
     date: new Date().toISOString().split("T")[0],
     time: "08:30 PM",
     type: "medicine",

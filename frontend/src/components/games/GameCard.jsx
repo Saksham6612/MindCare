@@ -2,6 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { Play, Clock, Sparkles } from 'lucide-react';
 import DifficultyBadge from './DifficultyBadge';
+import { useLanguage } from '../../context/LanguageContext';
 
 export default function GameCard({
   title,
@@ -13,6 +14,8 @@ export default function GameCard({
   badgeText,
   isComingSoon = false
 }) {
+  const { t } = useLanguage();
+
   return (
     <div className="senior-card p-6 sm:p-7 bg-white border-2 border-purple-200 hover:border-purple-400 shadow-sm flex flex-col justify-between space-y-6 transition-all group">
       {/* Card Header & Content */}
@@ -57,7 +60,7 @@ export default function GameCard({
           disabled
           className="w-full py-4 text-lg sm:text-xl font-extrabold rounded-2xl bg-gray-100 text-gray-400 border-2 border-gray-200 flex items-center justify-center gap-2 cursor-not-allowed"
         >
-          <span>Coming Soon</span>
+          <span>{t('games.comingSoon')}</span>
         </button>
       ) : (
         <Link
@@ -66,7 +69,7 @@ export default function GameCard({
           className="senior-btn-primary w-full py-4 text-xl sm:text-2xl font-extrabold rounded-2xl flex items-center justify-center gap-3 shadow-md active:scale-95 group/btn"
         >
           <Play className="w-6 h-6 fill-white group-hover/btn:scale-110 transition-transform" />
-          <span>Play</span>
+          <span>{t('games.playGame')}</span>
         </Link>
       )}
     </div>

@@ -1,8 +1,10 @@
 import React, { useState } from 'react';
 import { Pill, Clock, Check, CheckCircle2 } from 'lucide-react';
+import { useLanguage } from '../../context/LanguageContext';
 
 export default function MedicineCard() {
   const [isTaken, setIsTaken] = useState(false);
+  const { t } = useLanguage();
 
   return (
     <section 
@@ -20,11 +22,11 @@ export default function MedicineCard() {
         <div className="space-y-1">
           <div className="flex items-center gap-2">
             <span className="text-xs sm:text-sm font-extrabold uppercase tracking-wider text-purple-800 bg-purple-100 px-3 py-0.5 rounded-full">
-              Medication
+              {t('home.medication')}
             </span>
             {isTaken && (
               <span className="text-xs sm:text-sm font-extrabold text-emerald-800 bg-emerald-100 px-2.5 py-0.5 rounded-full flex items-center gap-1">
-                <CheckCircle2 className="w-3.5 h-3.5" /> Taken
+                <CheckCircle2 className="w-3.5 h-3.5" /> {t('home.taken')}
               </span>
             )}
           </div>
@@ -32,13 +34,13 @@ export default function MedicineCard() {
           <h3 className={`text-2xl sm:text-3xl font-extrabold tracking-tight ${
             isTaken ? 'text-gray-500 line-through' : 'text-gray-900'
           }`}>
-            Morning Tablet
+            {t('home.morningTablet')}
           </h3>
 
           <div className="flex items-center gap-1.5 text-base sm:text-lg font-bold text-purple-900 pt-0.5">
             <Clock className="w-5 h-5 text-purple-600" />
-            <span>10:00 AM</span>
-            <span className="text-gray-400 font-normal">• 1 Tablet with warm water</span>
+            <span>{t('home.tabletTime')}</span>
+            <span className="text-gray-400 font-normal">• {t('home.tabletInstruction')}</span>
           </div>
         </div>
       </div>
@@ -46,7 +48,7 @@ export default function MedicineCard() {
       {/* Right: Mark as Taken Action */}
       <button
         onClick={() => setIsTaken(!isTaken)}
-        aria-label={isTaken ? "Morning Tablet marked as taken. Tap to undo." : "Mark Morning Tablet as Taken"}
+        aria-label={isTaken ? `${t('home.morningTablet')} ${t('home.taken')}` : `${t('home.markAsTaken')} ${t('home.morningTablet')}`}
         className={`w-full sm:w-auto py-4 px-6 sm:px-8 rounded-2xl font-extrabold text-lg sm:text-xl flex items-center justify-center gap-3 transition-all duration-200 shadow-md active:scale-95 cursor-pointer shrink-0 ${
           isTaken
             ? 'bg-emerald-600 hover:bg-emerald-700 text-white border-2 border-emerald-500'
@@ -56,12 +58,12 @@ export default function MedicineCard() {
         {isTaken ? (
           <>
             <Check className="w-6 h-6 stroke-[3px]" />
-            <span>Taken</span>
+            <span>{t('home.taken')}</span>
           </>
         ) : (
           <>
             <CheckCircle2 className="w-6 h-6" />
-            <span>Mark as Taken</span>
+            <span>{t('home.markAsTaken')}</span>
           </>
         )}
       </button>

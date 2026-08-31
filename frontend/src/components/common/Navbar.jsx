@@ -2,6 +2,7 @@ import React from 'react';
 import { NavLink } from 'react-router-dom';
 import { Home, Clock, Brain, User, Sparkles, Mic, HeartHandshake } from 'lucide-react';
 import { NAVIGATION_ITEMS } from '../../utils/constants';
+import { useLanguage } from '../../context/LanguageContext';
 
 const ICON_MAP = {
   Home: Home,
@@ -13,7 +14,16 @@ const ICON_MAP = {
   HeartHandshake: HeartHandshake,
 };
 
+const NAV_TRANSLATION_KEYS = {
+  "/": "nav.home",
+  "/games": "nav.games",
+  "/reminders": "nav.reminders",
+  "/caregiver": "nav.profile"
+};
+
 export default function Navbar() {
+  const { t } = useLanguage();
+
   return (
     <nav 
       aria-label="Main Navigation"
@@ -22,6 +32,7 @@ export default function Navbar() {
       <div className="max-w-4xl mx-auto flex items-center justify-around gap-1 sm:gap-2">
         {NAVIGATION_ITEMS.map((item) => {
           const IconComponent = ICON_MAP[item.icon] || Home;
+          const label = NAV_TRANSLATION_KEYS[item.path] ? t(NAV_TRANSLATION_KEYS[item.path]) : item.label;
 
           return (
             <NavLink
@@ -45,7 +56,7 @@ export default function Navbar() {
                   <span className={`text-xs sm:text-sm tracking-tight ${
                     isActive ? 'font-extrabold text-white' : 'font-semibold text-gray-700'
                   }`}>
-                    {item.label}
+                    {label}
                   </span>
                 </>
               )}

@@ -1,8 +1,9 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Trophy, RotateCcw, ArrowLeft, CheckCircle2, XCircle, Clock, Sparkles, Brain, ArrowUpRight, TrendingUp } from 'lucide-react';
+import { Trophy, RotateCcw, ArrowLeft, CheckCircle2, XCircle, Brain } from 'lucide-react';
 import MemoryItemCard from './MemoryItemCard';
 import DifficultyBadge from '../DifficultyBadge';
+import { useLanguage } from '../../../context/LanguageContext';
 
 export default function ResultsStep({
   score,
@@ -12,25 +13,38 @@ export default function ResultsStep({
   extraItems,
   responseTime,
   recommendation,
+  recommendationKey,
+  recommendationParams,
   nextDifficulty,
   currentDifficulty,
   adaptiveStatus = 'maintained',
   onPlayAgain
 }) {
+  const { t } = useLanguage();
   const percentage = Math.round((score / totalTargets) * 100);
 
-  let celebrationTitle = "Wonderful Memory, Amma! 🎉";
-  let celebrationMessage = "You remembered the objects with great accuracy!";
+  // Translate recommendation: use key-based translation if available, fall back to English string
+  const translatedNextDiff = recommendationParams?.nextDifficulty
+    ? (t(`difficulty.${recommendationParams.nextDifficulty.toLowerCase()}`) || recommendationParams.nextDifficulty)
+    : '';
+  const translatedRecommendation = recommendationKey
+    ? t(`adaptiveRecommendations.${recommendationKey}`, { nextDifficulty: translatedNextDiff })
+    : recommendation;
+
+  let celebrationTitle = t('memoryGame.wonderfulMemoryTitle');
+  let celebrationMessage = t('memoryGame.wonderfulMemoryMsg');
   let badgeColor = "bg-emerald-100 text-emerald-900 border-emerald-300";
 
   if (percentage === 100) {
-    celebrationTitle = "Perfect Recall, Amma! 🌟";
-    celebrationMessage = "Outstanding! You remembered all objects without a single mistake!";
+    celebrationTitle = t('memoryGame.perfectRecallTitle');
+    celebrationMessage = t('memoryGame.perfectRecallMsg');
   } else if (percentage < 50) {
-    celebrationTitle = "Good Practice, Amma! 🌸";
-    celebrationMessage = "Every daily exercise strengthens your memory pathways. Great effort!";
+    celebrationTitle = t('memoryGame.goodPracticeTitle');
+    celebrationMessage = t('memoryGame.goodPracticeMsg');
     badgeColor = "bg-purple-100 text-purple-900 border-purple-300";
   }
+
+  const translatedDifficulty = t(`difficulty.${currentDifficulty.toLowerCase()}`) || currentDifficulty;
 
   return (
     <div className="space-y-6 sm:space-y-8 animate-in fade-in duration-300 max-w-3xl mx-auto">
@@ -42,7 +56,7 @@ export default function ResultsStep({
 
         <div className="space-y-1">
           <span className={`inline-block px-4 py-1 rounded-full text-sm font-extrabold uppercase tracking-wide border ${badgeColor}`}>
-            Game Completed
+            {t('memoryGame.gameCompleted')}
           </span>
           <h2 className="text-3xl sm:text-4xl font-black text-gray-900 tracking-tight">
             {celebrationTitle}
@@ -56,51 +70,51 @@ export default function ResultsStep({
         <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 sm:gap-4 pt-3 max-w-xl mx-auto">
           {/* Score */}
           <div className="bg-white border-2 border-purple-200 p-4 rounded-2xl shadow-2xs">
-            <span className="text-xs font-bold text-gray-500 uppercase block">Score</span>
+            <span className="text-xs font-bold text-gray-500 uppercase block">{t('memoryGame.scoreLabel')}</span>
             <span className="text-3xl sm:text-4xl font-black text-purple-900 block">
               {score} / {totalTargets}
             </span>
-            <span className="text-xs font-bold text-emerald-700">{percentage}% Accuracy</span>
+            <span className="text-xs font-bold text-emerald-700">{t('memoryGame.accuracyLabel', { percentage })}</span>
           </div>
 
           {/* Response Time */}
           <div className="bg-white border-2 border-purple-200 p-4 rounded-2xl shadow-2xs">
-            <span className="text-xs font-bold text-gray-500 uppercase block">Response Time</span>
+            <span className="text-xs font-bold text-gray-500 uppercase block">{t('memoryGame.responseTimeLabel')}</span>
             <span className="text-3xl sm:text-4xl font-black text-purple-900 block">
               {responseTime}s
             </span>
-            <span className="text-xs font-bold text-purple-700">Elapsed Time</span>
+            <span className="text-xs font-bold text-purple-700">{t('memoryGame.elapsedTimeLabel')}</span>
           </div>
 
           {/* Current Level */}
           <div className="bg-white border-2 border-purple-200 p-4 rounded-2xl shadow-2xs col-span-2 sm:col-span-1">
-            <span className="text-xs font-bold text-gray-500 uppercase block">Current Level</span>
+            <span className="text-xs font-bold text-gray-500 uppercase block">{t('memoryGame.currentLevelLabel')}</span>
             <span className="text-2xl sm:text-3xl font-black text-purple-900 block mt-1">
-              {currentDifficulty}
+              {translatedDifficulty}
             </span>
-            <span className="text-xs font-bold text-purple-600">Adaptive</span>
+            <span className="text-xs font-bold text-purple-600">{t('memoryGame.adaptiveLabel')}</span>
           </div>
         </div>
       </div>
 
       {/* 2. Adaptive Difficulty Recommendation Card */}
-      {recommendation && (
+      {translatedRecommendation && (
         <div className="senior-card p-6 sm:p-7 bg-purple-50/80 border-3 border-purple-300 shadow-sm space-y-3">
           <div className="flex items-center justify-between gap-3">
             <div className="flex items-center gap-2 text-purple-900 font-extrabold text-sm sm:text-base">
               <Brain className="w-5 h-5 text-purple-700 shrink-0" />
-              <span>Adaptive Difficulty Recommendation</span>
+              <span>{t('memoryGame.adaptiveRecommendation')}</span>
             </div>
             {nextDifficulty && (
               <div className="flex items-center gap-1.5">
-                <span className="text-xs font-bold text-gray-500">Next:</span>
+                <span className="text-xs font-bold text-gray-500">{t('nextLabel')}</span>
                 <DifficultyBadge difficulty={nextDifficulty} />
               </div>
             )}
           </div>
 
           <p className="text-lg sm:text-xl font-bold text-purple-950 leading-relaxed">
-            "{recommendation}"
+            "{translatedRecommendation}"
           </p>
         </div>
       )}
@@ -114,10 +128,10 @@ export default function ResultsStep({
             </div>
             <div>
               <h3 className="text-xl sm:text-2xl font-extrabold text-gray-900">
-                Correct Answers ({correctItems.length})
+                {t('memoryGame.correctAnswers', { count: correctItems.length })}
               </h3>
               <p className="text-sm sm:text-base font-semibold text-emerald-800">
-                Objects you saw and correctly selected
+                {t('memoryGame.correctAnswersSub')}
               </p>
             </div>
           </div>
@@ -145,10 +159,10 @@ export default function ResultsStep({
             </div>
             <div>
               <h3 className="text-xl sm:text-2xl font-extrabold text-gray-900">
-                Review & Learn
+                {t('memoryGame.reviewLearn')}
               </h3>
               <p className="text-sm sm:text-base font-semibold text-gray-600">
-                Items missed or unshown cards
+                {t('memoryGame.reviewLearnSub')}
               </p>
             </div>
           </div>
@@ -183,7 +197,7 @@ export default function ResultsStep({
           className="senior-btn-primary py-4 px-8 text-xl font-extrabold flex items-center justify-center gap-3"
         >
           <RotateCcw className="w-6 h-6" />
-          <span>Play Again</span>
+          <span>{t('memoryGame.playAgain')}</span>
         </button>
 
         <Link
@@ -191,7 +205,7 @@ export default function ResultsStep({
           className="py-4 px-8 rounded-2xl bg-white hover:bg-purple-50 text-purple-900 font-extrabold text-xl border-2 border-purple-200 flex items-center justify-center gap-2 transition"
         >
           <ArrowLeft className="w-5 h-5" />
-          <span>All Brain Games</span>
+          <span>{t('games.allBrainGames')}</span>
         </Link>
       </div>
     </div>

@@ -50,6 +50,8 @@ export function evaluateAdaptiveDifficulty({
   let nextDifficulty = currentDifficulty;
   let status = 'maintained';
   let recommendation = '';
+  let recommendationKey = 'maintained';
+  let recommendationParams = {};
 
   const currentIndex = DIFFICULTY_LEVELS.indexOf(currentDifficulty);
   const validIndex = currentIndex >= 0 ? currentIndex : 0;
@@ -59,10 +61,14 @@ export function evaluateAdaptiveDifficulty({
     if (validIndex < DIFFICULTY_LEVELS.length - 1) {
       nextDifficulty = DIFFICULTY_LEVELS[validIndex + 1];
       status = 'increased';
+      recommendationKey = 'increased';
+      recommendationParams = { nextDifficulty };
       recommendation = `Great job! Your recall was fast and accurate. Tomorrow's challenge will be slightly harder (${nextDifficulty}).`;
     } else {
       nextDifficulty = 'Hard';
       status = 'maintained';
+      recommendationKey = 'atMax';
+      recommendationParams = {};
       recommendation = "Outstanding recall! You are mastering our highest difficulty level with great precision.";
     }
   }
@@ -71,10 +77,14 @@ export function evaluateAdaptiveDifficulty({
     if (validIndex > 0) {
       nextDifficulty = DIFFICULTY_LEVELS[validIndex - 1];
       status = 'decreased';
+      recommendationKey = 'decreased';
+      recommendationParams = { nextDifficulty };
       recommendation = `Good effort, Amma! We have adjusted the challenge to a gentler pace (${nextDifficulty}) so you can practice comfortably.`;
     } else {
       nextDifficulty = 'Easy';
       status = 'maintained';
+      recommendationKey = 'atMin';
+      recommendationParams = {};
       recommendation = "Keep practicing at your own gentle pace. Regular daily exercise strengthens memory retention.";
     }
   }
@@ -82,12 +92,16 @@ export function evaluateAdaptiveDifficulty({
   else {
     nextDifficulty = currentDifficulty;
     status = 'maintained';
+    recommendationKey = 'maintained';
+    recommendationParams = {};
     recommendation = "Steady progress! You are performing well. We'll keep this comfortable level for your next session.";
   }
 
   return {
     nextDifficulty,
     recommendation,
+    recommendationKey,
+    recommendationParams,
     status
   };
 }

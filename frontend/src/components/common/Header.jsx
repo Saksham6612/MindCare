@@ -1,6 +1,7 @@
 import React from 'react';
-import { Heart, PhoneCall, Type, Eye, Sparkles } from 'lucide-react';
+import { Heart, PhoneCall, Type, Eye, Sparkles, Languages } from 'lucide-react';
 import { useTimeOfDay } from '../../hooks/useTimeOfDay';
+import { useLanguage } from '../../context/LanguageContext';
 
 export default function Header({ 
   onOpenSOS, 
@@ -10,6 +11,7 @@ export default function Header({
   onToggleContrast 
 }) {
   const { formattedTime, formattedDate } = useTimeOfDay();
+  const { language, toggleLanguage, t } = useLanguage();
 
   return (
     <header className="sticky top-0 z-40 bg-[#FAF7F2]/95 backdrop-blur-md border-b-2 border-[#EADBCE] shadow-xs px-4 sm:px-6 py-3.5 transition-colors">
@@ -25,11 +27,11 @@ export default function Header({
                 Mind<span className="text-purple-600">Care</span>
               </span>
               <span className="hidden md:inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-bold bg-purple-100 text-purple-800 border border-purple-200">
-                <Sparkles className="w-3 h-3" /> Senior Companion
+                <Sparkles className="w-3 h-3" /> {t('app.seniorCompanion')}
               </span>
             </div>
             <p className="text-xs sm:text-sm font-semibold text-gray-500 hidden sm:block">
-              Guwahati, Assam • SIH 2026
+              {t('app.subLocation')}
             </p>
           </div>
         </div>
@@ -44,25 +46,42 @@ export default function Header({
           </span>
         </div>
 
-        {/* Accessibility & SOS Actions */}
+        {/* Accessibility, Language & SOS Actions */}
         <div className="flex items-center gap-2 sm:gap-3">
+          {/* Language Switcher Button (English <-> Bengali) */}
+          <button
+            onClick={toggleLanguage}
+            title={t('header.languageToggleTitle')}
+            aria-label={`Change language. Currently ${language === 'en' ? 'English' : 'Bengali'}`}
+            className="flex items-center gap-1.5 px-3 py-2 sm:px-3.5 sm:py-2.5 bg-white hover:bg-purple-50 border-2 border-purple-200 text-purple-900 rounded-xl font-bold text-sm sm:text-base transition shadow-xs active:scale-95 cursor-pointer"
+          >
+            <Languages className="w-4 h-4 sm:w-5 sm:h-5 text-purple-600" />
+            <span className="font-extrabold text-xs sm:text-sm tracking-wide">
+              {language === 'en' ? 'বাংলা' : 'English'}
+            </span>
+          </button>
+
           {/* Font Size Adjuster */}
           <button
             onClick={onCycleFontSize}
-            title="Adjust text size"
+            title={t('header.fontAdjusterTitle')}
             aria-label={`Change text size. Currently ${fontScale}`}
             className="flex items-center gap-1.5 px-3 py-2 sm:px-3.5 sm:py-2.5 bg-white hover:bg-purple-50 border-2 border-purple-200 text-purple-900 rounded-xl font-bold text-sm sm:text-base transition shadow-xs active:scale-95"
           >
             <Type className="w-4 h-4 sm:w-5 sm:h-5 text-purple-600" />
             <span className="uppercase text-xs tracking-wider">
-              {fontScale === 'extra-large' ? 'XL Text' : fontScale === 'large' ? 'Large Text' : 'Normal'}
+              {fontScale === 'extra-large' 
+                ? t('header.fontExtraLarge') 
+                : fontScale === 'large' 
+                ? t('header.fontLarge') 
+                : t('header.fontNormal')}
             </span>
           </button>
 
           {/* High Contrast Toggle */}
           <button
             onClick={onToggleContrast}
-            title="Toggle High Contrast"
+            title={t('header.contrastToggleTitle')}
             aria-label="Toggle High Contrast Mode"
             className={`p-2.5 sm:px-3 sm:py-2.5 rounded-xl border-2 font-bold text-sm sm:text-base flex items-center gap-1.5 transition shadow-xs active:scale-95 ${
               highContrast 
@@ -72,18 +91,18 @@ export default function Header({
           >
             <Eye className="w-5 h-5 text-purple-600" />
             <span className="hidden md:inline text-xs uppercase tracking-wider">
-              {highContrast ? 'High Contrast: On' : 'Contrast'}
+              {highContrast ? t('header.contrastOn') : t('header.contrastLabel')}
             </span>
           </button>
 
           {/* Emergency SOS Button */}
           <button
             onClick={onOpenSOS}
-            aria-label="Open Emergency and Help Contacts"
+            aria-label={t('header.sosHelpAria')}
             className="senior-btn-sos px-3.5 py-2 sm:px-4 sm:py-2.5 flex items-center gap-2 rounded-xl text-white font-extrabold text-sm sm:text-base transition shadow-md active:scale-95 cursor-pointer"
           >
             <PhoneCall className="w-5 h-5 animate-pulse" />
-            <span className="tracking-wide">SOS HELP</span>
+            <span className="tracking-wide">{t('header.sosHelp')}</span>
           </button>
         </div>
       </div>

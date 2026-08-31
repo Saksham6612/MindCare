@@ -1,17 +1,26 @@
 import React from 'react';
+import { useLanguage } from '../../context/LanguageContext';
 
 export default function DifficultyBadge({ difficulty = 'Easy' }) {
+  const { t } = useLanguage();
   const norm = difficulty.toLowerCase();
 
   let colorClasses = 'bg-emerald-100 text-emerald-900 border-emerald-300';
   let dotCount = 1;
+  let translatedText = t('difficulty.easy');
 
   if (norm.includes('medium') || norm.includes('moderate')) {
     colorClasses = 'bg-amber-100 text-amber-900 border-amber-300';
     dotCount = 2;
-  } else if (norm.includes('adaptive') || norm.includes('hard') || norm.includes('challenging')) {
+    translatedText = t('difficulty.medium');
+  } else if (norm.includes('adaptive')) {
     colorClasses = 'bg-purple-100 text-purple-900 border-purple-300';
     dotCount = 3;
+    translatedText = t('difficulty.adaptive');
+  } else if (norm.includes('hard') || norm.includes('challenging')) {
+    colorClasses = 'bg-purple-100 text-purple-900 border-purple-300';
+    dotCount = 3;
+    translatedText = t('difficulty.hard');
   }
 
   return (
@@ -34,7 +43,7 @@ export default function DifficultyBadge({ difficulty = 'Easy' }) {
           />
         ))}
       </span>
-      <span>{difficulty}</span>
+      <span>{translatedText}</span>
     </span>
   );
 }

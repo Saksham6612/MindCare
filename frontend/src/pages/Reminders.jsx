@@ -6,19 +6,21 @@ import {
 import { todaysReminders, REMINDER_TYPES } from '../data/mockData';
 import ReminderCard from '../components/reminders/ReminderCard';
 import AddReminderForm from '../components/reminders/AddReminderForm';
-
-const TYPE_FILTER_OPTIONS = [
-  { value: 'all', label: 'All', icon: Filter },
-  { value: 'medicine', label: 'Medicine', icon: Pill },
-  { value: 'hydration', label: 'Hydration', icon: Droplets },
-  { value: 'activity', label: 'Activity', icon: Footprints },
-  { value: 'appointment', label: 'Appointment', icon: CalendarClock }
-];
+import { useLanguage } from '../context/LanguageContext';
 
 export default function Reminders() {
   const [reminders, setReminders] = useState(todaysReminders);
   const [activeFilter, setActiveFilter] = useState('all');
   const [showForm, setShowForm] = useState(false);
+  const { t } = useLanguage();
+
+  const typeFilterOptions = [
+    { value: 'all', label: t('reminders.filterAll'), icon: Filter },
+    { value: 'medicine', label: t('reminders.filterMedicine'), icon: Pill },
+    { value: 'hydration', label: t('reminders.filterHydration'), icon: Droplets },
+    { value: 'activity', label: t('reminders.filterActivity'), icon: Footprints },
+    { value: 'appointment', label: t('reminders.filterAppointment'), icon: CalendarClock }
+  ];
 
   const today = new Date().toISOString().split('T')[0];
 
@@ -65,24 +67,24 @@ export default function Reminders() {
             className="inline-flex items-center gap-2 text-purple-700 font-bold text-base hover:underline mb-1"
           >
             <ArrowLeft className="w-5 h-5" />
-            <span>Back to Home</span>
+            <span>{t('reminders.backToHome')}</span>
           </Link>
           <h1 className="text-3xl sm:text-4xl font-extrabold text-gray-900 tracking-tight">
-            Today's Reminders
+            {t('reminders.title')}
           </h1>
           <p className="text-lg sm:text-xl text-gray-600 font-semibold">
-            Tap <strong className="text-purple-700">"Mark Done"</strong> after completing each item.
+            {t('reminders.subtitle')}
           </p>
         </div>
 
         {/* Add Reminder button */}
         <button
           onClick={() => setShowForm(true)}
-          className="senior-btn-primary py-3.5 px-6 text-lg sm:text-xl font-extrabold flex items-center gap-2 shrink-0 self-start sm:self-auto"
-          aria-label="Add a new reminder"
+          className="senior-btn-primary py-3.5 px-6 text-lg sm:text-xl font-extrabold flex items-center gap-2 shrink-0 self-start sm:self-auto cursor-pointer"
+          aria-label={t('reminders.addReminderBtn')}
         >
           <Plus className="w-6 h-6" />
-          Add Reminder
+          <span>{t('reminders.addReminderBtn')}</span>
         </button>
       </div>
 
@@ -92,11 +94,11 @@ export default function Reminders() {
           <div className="flex items-center gap-2">
             <Sparkles className="w-5 h-5 text-purple-600" />
             <span className="text-base sm:text-lg font-extrabold text-purple-900 uppercase tracking-wide">
-              Daily Progress
+              {t('reminders.dailyProgress')}
             </span>
           </div>
           <span className="text-2xl sm:text-3xl font-black text-gray-900">
-            {completedCount} <span className="text-gray-400 font-semibold text-xl">/ {totalCount} done</span>
+            {t('reminders.doneCount', { completed: completedCount, total: totalCount })}
           </span>
         </div>
 
@@ -109,7 +111,7 @@ export default function Reminders() {
             aria-valuenow={progressPct}
             aria-valuemin={0}
             aria-valuemax={100}
-            aria-label={`${progressPct}% reminders completed`}
+            aria-label={t('reminders.progressAria', { percent: progressPct })}
           />
         </div>
 
@@ -119,9 +121,10 @@ export default function Reminders() {
             const count = todayReminders.filter(r => r.type === key).length;
             if (count === 0) return null;
             const done = todayReminders.filter(r => r.type === key && r.completed).length;
+            const typeLabel = t(`reminders.filter${key.charAt(0).toUpperCase() + key.slice(1)}`) || cfg.label;
             return (
               <span key={key} className={`text-xs font-bold px-3 py-1 rounded-xl border ${cfg.badgeBg}`}>
-                {cfg.label}: {done}/{count}
+                {typeLabel}: {done}/{count}
               </span>
             );
           })}
@@ -130,7 +133,7 @@ export default function Reminders() {
 
       {/* Filter Tabs */}
       <div className="flex flex-wrap gap-2">
-        {TYPE_FILTER_OPTIONS.map((opt) => {
+        {typeFilterOptions.map((opt) => {
           const Icon = opt.icon;
           const isActive = activeFilter === opt.value;
           return (
@@ -167,11 +170,11 @@ export default function Reminders() {
           <p className="text-5xl">🌸</p>
           <h3 className="text-2xl sm:text-3xl font-extrabold text-gray-800">
             {activeFilter === 'all'
-              ? 'No reminders for today yet.'
-              : `No ${REMINDER_TYPES[activeFilter]?.label} reminders today.`}
+              ? t('reminders.noReminders')
+              : t('reminders.noFilteredReminders', { type: t(`reminders.filter${activeFilter.charAt(0).toUpperCase() + activeFilter.slice(1)}`) })}
           </h3>
           <p className="text-lg text-gray-500 font-semibold">
-            Tap "Add Reminder" above to create one.
+            {t('reminders.tapAddPrompt')}
           </p>
         </div>
       )}

@@ -1,5 +1,6 @@
 import React from 'react';
 import { TrendingUp, TrendingDown, Minus } from 'lucide-react';
+import { useLanguage } from '../../context/LanguageContext';
 
 /**
  * Reusable StatCard for the caregiver dashboard.
@@ -10,7 +11,6 @@ import { TrendingUp, TrendingDown, Minus } from 'lucide-react';
  * @param {string} iconBg - Tailwind bg class for icon container
  * @param {string} iconColor - Tailwind text class for icon
  * @param {number} trend - Positive or negative change to show
- * @param {string} trendLabel - Label for the trend (e.g. "vs last week")
  * @param {string} borderColor - Tailwind border-color class
  */
 export default function StatCard({
@@ -21,10 +21,10 @@ export default function StatCard({
   iconBg = 'bg-purple-100',
   iconColor = 'text-purple-700',
   trend,
-  trendLabel = 'vs last week',
   borderColor = 'border-purple-200',
   children
 }) {
+  const { t } = useLanguage();
   const hasTrend = typeof trend === 'number';
   const isPositive = trend > 0;
   const isNeutral = trend === 0;
@@ -65,7 +65,7 @@ export default function StatCard({
           <span className={
             isNeutral ? 'text-gray-500' : isPositive ? 'text-emerald-700' : 'text-rose-700'
           }>
-            {isPositive ? '+' : ''}{trend}% {trendLabel}
+            {isPositive ? '+' : ''}{trend}% {t('vsLastWeek')}
           </span>
         </div>
       )}

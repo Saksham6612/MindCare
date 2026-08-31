@@ -11,12 +11,7 @@ import {
   Tooltip,
   Legend
 } from 'recharts';
-
-const CHART_LINES = [
-  { key: 'memory', label: 'Memory', color: '#7C3AED' },
-  { key: 'attention', label: 'Attention', color: '#0EA5E9' },
-  { key: 'pattern', label: 'Pattern', color: '#10B981' }
-];
+import { useLanguage } from '../../context/LanguageContext';
 
 function CustomTooltip({ active, payload, label }) {
   if (!active || !payload?.length) return null;
@@ -39,9 +34,19 @@ function CustomTooltip({ active, payload, label }) {
 
 export default function PerformanceChart({ data }) {
   const [chartType, setChartType] = useState('line');
-  const [visibleLines, setVisibleLines] = useState(
-    Object.fromEntries(CHART_LINES.map(l => [l.key, true]))
-  );
+  const { t } = useLanguage();
+
+  const chartLines = [
+    { key: 'memory', label: t('caregiver.statMemory'), color: '#7C3AED' },
+    { key: 'attention', label: t('caregiver.statAttention'), color: '#0EA5E9' },
+    { key: 'pattern', label: t('caregiver.statPattern'), color: '#10B981' }
+  ];
+
+  const [visibleLines, setVisibleLines] = useState({
+    memory: true,
+    attention: true,
+    pattern: true
+  });
 
   const toggleLine = (key) => {
     setVisibleLines(prev => ({ ...prev, [key]: !prev[key] }));
@@ -53,10 +58,10 @@ export default function PerformanceChart({ data }) {
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
         <div>
           <h3 className="text-lg sm:text-xl font-extrabold text-gray-900 tracking-tight">
-            Weekly Cognitive Performance
+            {t('caregiver.weeklyChartTitle')}
           </h3>
           <p className="text-sm font-semibold text-gray-500">
-            Memory, Attention & Pattern Recognition (%) — Last 7 days
+            {t('caregiver.weeklyChartSub')}
           </p>
         </div>
 
@@ -72,7 +77,7 @@ export default function PerformanceChart({ data }) {
                   : 'bg-white text-gray-600 hover:bg-gray-50'
               }`}
             >
-              {type}
+              {t(`chartType.${type}`)}
             </button>
           ))}
         </div>
@@ -80,7 +85,7 @@ export default function PerformanceChart({ data }) {
 
       {/* Metric toggles */}
       <div className="flex flex-wrap gap-2">
-        {CHART_LINES.map(line => (
+        {chartLines.map(line => (
           <button
             key={line.key}
             onClick={() => toggleLine(line.key)}
@@ -96,7 +101,7 @@ export default function PerformanceChart({ data }) {
         ))}
       </div>
 
-      {/* Chart — explicit height required by Recharts ResponsiveContainer */}
+      {/* Chart */}
       <div style={{ width: '100%', height: 260 }}>
         <ResponsiveContainer width="100%" height="100%">
           {chartType === 'line' ? (
@@ -105,7 +110,7 @@ export default function PerformanceChart({ data }) {
               <XAxis dataKey="day" tick={{ fontSize: 12, fontWeight: 700, fill: '#6B7280' }} axisLine={false} tickLine={false} />
               <YAxis domain={[40, 100]} tick={{ fontSize: 11, fill: '#9CA3AF' }} axisLine={false} tickLine={false} tickFormatter={v => `${v}%`} />
               <Tooltip content={<CustomTooltip />} />
-              {CHART_LINES.map(line => visibleLines[line.key] && (
+              {chartLines.map(line => visibleLines[line.key] && (
                 <Line
                   key={line.key}
                   type="monotone"
@@ -125,7 +130,7 @@ export default function PerformanceChart({ data }) {
               <YAxis domain={[0, 100]} tick={{ fontSize: 11, fill: '#9CA3AF' }} axisLine={false} tickLine={false} tickFormatter={v => `${v}%`} />
               <Tooltip content={<CustomTooltip />} />
               <Legend wrapperStyle={{ fontSize: 12, fontWeight: 700 }} />
-              {CHART_LINES.map(line => visibleLines[line.key] && (
+              {chartLines.map(line => visibleLines[line.key] && (
                 <Bar
                   key={line.key}
                   dataKey={line.key}

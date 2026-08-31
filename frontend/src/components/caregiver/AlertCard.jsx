@@ -1,5 +1,6 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { AlertTriangle, Info, CheckCircle2, X, Clock } from 'lucide-react';
+import { useLanguage } from '../../context/LanguageContext';
 
 const SEVERITY_CONFIG = {
   warning: {
@@ -9,7 +10,7 @@ const SEVERITY_CONFIG = {
     iconBg: 'bg-amber-100',
     iconColor: 'text-amber-700',
     badge: 'bg-amber-100 text-amber-900 border-amber-300',
-    badgeLabel: 'Warning'
+    badgeKey: 'alertBadge.warning'
   },
   info: {
     icon: Info,
@@ -18,7 +19,7 @@ const SEVERITY_CONFIG = {
     iconBg: 'bg-blue-100',
     iconColor: 'text-blue-700',
     badge: 'bg-blue-100 text-blue-900 border-blue-300',
-    badgeLabel: 'Info'
+    badgeKey: 'alertBadge.info'
   },
   success: {
     icon: CheckCircle2,
@@ -27,11 +28,12 @@ const SEVERITY_CONFIG = {
     iconBg: 'bg-emerald-100',
     iconColor: 'text-emerald-700',
     badge: 'bg-emerald-100 text-emerald-900 border-emerald-300',
-    badgeLabel: 'Resolved'
+    badgeKey: 'alertBadge.resolved'
   }
 };
 
 export default function AlertCard({ alert, onDismiss }) {
+  const { t } = useLanguage();
   const config = SEVERITY_CONFIG[alert.severity] || SEVERITY_CONFIG.info;
   const Icon = config.icon;
 
@@ -44,10 +46,10 @@ export default function AlertCard({ alert, onDismiss }) {
       <div className="flex-1 min-w-0 space-y-1">
         <div className="flex flex-wrap items-center gap-2">
           <span className={`text-xs font-extrabold uppercase tracking-wider px-2.5 py-0.5 rounded-full border ${config.badge}`}>
-            {config.badgeLabel}
+            {t(config.badgeKey)}
           </span>
           {alert.resolved && (
-            <span className="text-xs font-bold text-gray-400">Resolved</span>
+            <span className="text-xs font-bold text-gray-400">{t('alertBadge.resolvedText')}</span>
           )}
         </div>
 

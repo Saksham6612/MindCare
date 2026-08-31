@@ -1,30 +1,33 @@
 import React, { useState } from 'react';
 import { X, Plus, Clock, Calendar, AlignLeft, Tag } from 'lucide-react';
 import { REMINDER_TYPES } from '../../data/mockData';
-
-const TYPE_OPTIONS = [
-  { value: 'medicine', label: '💊 Medicine' },
-  { value: 'hydration', label: '💧 Hydration' },
-  { value: 'activity', label: '🚶 Daily Activity' },
-  { value: 'appointment', label: '🏥 Medical Appointment' }
-];
-
-const EMPTY_FORM = {
-  title: '',
-  description: '',
-  date: new Date().toISOString().split('T')[0],
-  time: '09:00 AM',
-  type: 'medicine'
-};
+import { useLanguage } from '../../context/LanguageContext';
 
 export default function AddReminderForm({ onAdd, onClose }) {
-  const [form, setForm] = useState(EMPTY_FORM);
+  const { t } = useLanguage();
+
+  const typeOptions = [
+    { value: 'medicine', label: `💊 ${t('reminders.filterMedicine')}` },
+    { value: 'hydration', label: `💧 ${t('reminders.filterHydration')}` },
+    { value: 'activity', label: `🚶 ${t('reminders.filterActivity')}` },
+    { value: 'appointment', label: `🏥 ${t('reminders.filterAppointment')}` }
+  ];
+
+  const emptyForm = {
+    title: '',
+    description: '',
+    date: new Date().toISOString().split('T')[0],
+    time: '09:00 AM',
+    type: 'medicine'
+  };
+
+  const [form, setForm] = useState(emptyForm);
   const [errors, setErrors] = useState({});
 
   const validate = () => {
     const next = {};
-    if (!form.title.trim()) next.title = 'Please enter a reminder title.';
-    if (!form.time.trim()) next.time = 'Please choose a time.';
+    if (!form.title.trim()) next.title = t('reminders.titleRequired');
+    if (!form.time.trim()) next.time = t('reminders.timeRequired');
     return next;
   };
 
@@ -39,19 +42,17 @@ export default function AddReminderForm({ onAdd, onClose }) {
     onAdd({
       id: `rem-${Date.now()}`,
       title: form.title.trim(),
-      description: form.description.trim() || typeConfig.label + ' reminder',
+      description: form.description.trim() || `${t('reminders.filter' + form.type.charAt(0).toUpperCase() + form.type.slice(1))} reminder`,
       date: form.date,
       time: form.time,
       type: form.type,
       completed: false
     });
 
-    setForm(EMPTY_FORM);
+    setForm(emptyForm);
     setErrors({});
     onClose();
   };
-
-  const typeConfig = REMINDER_TYPES[form.type] || REMINDER_TYPES.medicine;
 
   const inputBase =
     'w-full px-4 py-3 rounded-2xl border-2 text-lg font-semibold text-gray-900 bg-white outline-none transition focus:border-purple-500 focus:ring-2 focus:ring-purple-200';
@@ -68,10 +69,10 @@ export default function AddReminderForm({ onAdd, onClose }) {
         <div className="flex items-center justify-between p-6 sm:p-7 border-b-2 border-purple-100">
           <div>
             <h2 id="add-reminder-title" className="text-2xl sm:text-3xl font-extrabold text-gray-900">
-              Add New Reminder
+              {t('reminders.addNewReminder')}
             </h2>
             <p className="text-base sm:text-lg text-gray-500 font-semibold">
-              Fill in the details below and tap "Save".
+              {t('reminders.formSubtitle')}
             </p>
           </div>
           <button
@@ -89,10 +90,10 @@ export default function AddReminderForm({ onAdd, onClose }) {
           <div className="space-y-2">
             <label className="flex items-center gap-2 text-lg font-extrabold text-gray-900">
               <Tag className="w-5 h-5 text-purple-600" />
-              Reminder Type
+              {t('reminders.reminderType')}
             </label>
             <div className="grid grid-cols-2 gap-3">
-              {TYPE_OPTIONS.map((opt) => (
+              {typeOptions.map((opt) => (
                 <button
                   key={opt.value}
                   type="button"
@@ -113,14 +114,14 @@ export default function AddReminderForm({ onAdd, onClose }) {
           <div className="space-y-2">
             <label htmlFor="rem-title" className="flex items-center gap-2 text-lg font-extrabold text-gray-900">
               <AlignLeft className="w-5 h-5 text-purple-600" />
-              Title <span className="text-rose-500">*</span>
+              {t('reminders.titleInput')} <span className="text-rose-500">*</span>
             </label>
             <input
               id="rem-title"
               type="text"
               value={form.title}
               onChange={e => setForm(f => ({ ...f, title: e.target.value }))}
-              placeholder="e.g. Evening Blood Pressure Tablet"
+              placeholder={t('reminders.titlePlaceholder')}
               className={`${inputBase} ${errors.title ? 'border-rose-400' : 'border-gray-200'}`}
             />
             {errors.title && (
@@ -132,13 +133,13 @@ export default function AddReminderForm({ onAdd, onClose }) {
           <div className="space-y-2">
             <label htmlFor="rem-desc" className="flex items-center gap-2 text-lg font-extrabold text-gray-900">
               <AlignLeft className="w-5 h-5 text-purple-600" />
-              Description (Optional)
+              {t('reminders.descriptionInput')}
             </label>
             <textarea
               id="rem-desc"
               value={form.description}
               onChange={e => setForm(f => ({ ...f, description: e.target.value }))}
-              placeholder="Extra notes or instructions..."
+              placeholder={t('reminders.descriptionPlaceholder')}
               rows={3}
               className={`${inputBase} resize-none`}
             />
@@ -149,7 +150,7 @@ export default function AddReminderForm({ onAdd, onClose }) {
             <div className="space-y-2">
               <label htmlFor="rem-date" className="flex items-center gap-2 text-lg font-extrabold text-gray-900">
                 <Calendar className="w-5 h-5 text-purple-600" />
-                Date
+                {t('reminders.dateInput')}
               </label>
               <input
                 id="rem-date"
@@ -163,7 +164,7 @@ export default function AddReminderForm({ onAdd, onClose }) {
             <div className="space-y-2">
               <label htmlFor="rem-time" className="flex items-center gap-2 text-lg font-extrabold text-gray-900">
                 <Clock className="w-5 h-5 text-purple-600" />
-                Time <span className="text-rose-500">*</span>
+                {t('reminders.timeInput')} <span className="text-rose-500">*</span>
               </label>
               <input
                 id="rem-time"
@@ -171,7 +172,6 @@ export default function AddReminderForm({ onAdd, onClose }) {
                 value={form.time.includes(':') && !form.time.includes('M')
                   ? form.time
                   : (() => {
-                      // Convert "09:00 AM" to "09:00"
                       try {
                         const d = new Date(`1970-01-01 ${form.time}`);
                         return isNaN(d) ? '09:00' : d.toTimeString().slice(0,5);
@@ -179,7 +179,6 @@ export default function AddReminderForm({ onAdd, onClose }) {
                     })()
                 }
                 onChange={e => {
-                  // Convert back to "HH:MM AM/PM"
                   try {
                     const [hh, mm] = e.target.value.split(':');
                     const d = new Date();
@@ -204,17 +203,17 @@ export default function AddReminderForm({ onAdd, onClose }) {
           <div className="flex flex-col sm:flex-row items-stretch gap-3 pt-2">
             <button
               type="submit"
-              className="senior-btn-primary flex items-center justify-center gap-2 py-4 text-xl font-extrabold flex-1"
+              className="senior-btn-primary flex items-center justify-center gap-2 py-4 text-xl font-extrabold flex-1 cursor-pointer"
             >
               <Plus className="w-6 h-6" />
-              Save Reminder
+              <span>{t('reminders.saveReminder')}</span>
             </button>
             <button
               type="button"
               onClick={onClose}
               className="py-4 px-6 rounded-2xl bg-gray-100 hover:bg-gray-200 text-gray-700 font-extrabold text-xl border-2 border-gray-200 transition cursor-pointer"
             >
-              Cancel
+              {t('reminders.cancel')}
             </button>
           </div>
         </form>

@@ -1,6 +1,7 @@
 import React from 'react';
 import { Pill, Droplets, Footprints, CalendarClock, Clock, CheckCircle2, Circle, Trash2 } from 'lucide-react';
 import { REMINDER_TYPES } from '../../data/mockData';
+import { useLanguage } from '../../context/LanguageContext';
 
 const TYPE_ICONS = {
   medicine: Pill,
@@ -10,8 +11,12 @@ const TYPE_ICONS = {
 };
 
 export default function ReminderCard({ reminder, onToggleComplete, onDelete }) {
+  const { t, isBengali } = useLanguage();
   const typeConfig = REMINDER_TYPES[reminder.type] || REMINDER_TYPES.medicine;
   const Icon = TYPE_ICONS[reminder.type] || Pill;
+  const typeLabel = t(`reminders.filter${reminder.type.charAt(0).toUpperCase() + reminder.type.slice(1)}`) || typeConfig.label;
+  const displayTitle = isBengali ? (reminder.title_bn || reminder.title) : reminder.title;
+  const displayDesc = isBengali ? (reminder.description_bn || reminder.description) : reminder.description;
 
   return (
     <div
@@ -38,11 +43,11 @@ export default function ReminderCard({ reminder, onToggleComplete, onDelete }) {
             {/* Type badge + optional completed tag */}
             <div className="flex flex-wrap items-center gap-2">
               <span className={`text-xs font-extrabold uppercase tracking-wider px-3 py-0.5 rounded-full border ${typeConfig.badgeBg}`}>
-                {typeConfig.label}
+                {typeLabel}
               </span>
               {reminder.completed && (
                 <span className="text-xs font-extrabold uppercase tracking-wider px-3 py-0.5 rounded-full bg-emerald-100 text-emerald-900 border border-emerald-300">
-                  ✓ Completed
+                  {t('reminders.completedBadge')}
                 </span>
               )}
             </div>
@@ -51,12 +56,12 @@ export default function ReminderCard({ reminder, onToggleComplete, onDelete }) {
             <h3 className={`text-xl sm:text-2xl font-extrabold tracking-tight leading-snug ${
               reminder.completed ? 'text-gray-500 line-through decoration-gray-400' : 'text-gray-900'
             }`}>
-              {reminder.title}
+              {displayTitle}
             </h3>
 
             {/* Description */}
             <p className="text-base sm:text-lg font-medium text-gray-600 leading-relaxed">
-              {reminder.description}
+              {displayDesc}
             </p>
 
             {/* Time & date */}
@@ -82,12 +87,12 @@ export default function ReminderCard({ reminder, onToggleComplete, onDelete }) {
             {reminder.completed ? (
               <>
                 <CheckCircle2 className="w-5 h-5 shrink-0" />
-                <span>Done</span>
+                <span>{t('reminders.done')}</span>
               </>
             ) : (
               <>
                 <Circle className="w-5 h-5 shrink-0 text-purple-200" />
-                <span>Mark Done</span>
+                <span>{t('reminders.markDone')}</span>
               </>
             )}
           </button>

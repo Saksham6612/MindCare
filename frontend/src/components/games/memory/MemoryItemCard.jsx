@@ -1,5 +1,6 @@
 import React from 'react';
 import { Check, X } from 'lucide-react';
+import { useLanguage } from '../../../context/LanguageContext';
 
 export default function MemoryItemCard({
   item,
@@ -13,6 +14,9 @@ export default function MemoryItemCard({
   size = 'normal'
 }) {
   const isLarge = size === 'large';
+  const { t } = useLanguage();
+
+  const itemName = t(`memoryGame.objects.${item.id}`) || item.name;
 
   // Determine styling based on mode
   let borderBgClass = 'bg-white border-2 border-purple-200 hover:border-purple-400 text-gray-900';
@@ -36,7 +40,7 @@ export default function MemoryItemCard({
       type="button"
       onClick={onClick}
       disabled={disabled}
-      aria-label={`${item.name} ${isSelected ? '(Selected)' : ''}`}
+      aria-label={`${itemName} ${isSelected ? '(Selected)' : ''}`}
       className={`rounded-3xl p-4 sm:p-5 flex flex-col items-center justify-center transition-all duration-150 select-none relative ${
         disabled && !showResult ? 'cursor-default' : 'cursor-pointer active:scale-95'
       } ${isLarge ? 'min-h-[140px] sm:min-h-[160px]' : 'min-h-[120px] sm:min-h-[140px]'} ${borderBgClass}`}
@@ -51,19 +55,19 @@ export default function MemoryItemCard({
       {/* Result Status Badges */}
       {showResult && isCorrect && (
         <span className="absolute top-2.5 right-2.5 px-2 py-0.5 bg-emerald-600 text-white text-xs font-black rounded-lg flex items-center gap-1">
-          <Check className="w-3.5 h-3.5 stroke-[3px]" /> Correct
+          <Check className="w-3.5 h-3.5 stroke-[3px]" /> {t('memoryGame.correctBadge')}
         </span>
       )}
 
       {showResult && isMissed && (
         <span className="absolute top-2.5 right-2.5 px-2 py-0.5 bg-amber-600 text-white text-xs font-black rounded-lg">
-          Missed
+          {t('memoryGame.missedBadge')}
         </span>
       )}
 
       {showResult && isExtra && (
         <span className="absolute top-2.5 right-2.5 px-2 py-0.5 bg-rose-600 text-white text-xs font-black rounded-lg flex items-center gap-1">
-          <X className="w-3.5 h-3.5 stroke-[3px]" /> Not Shown
+          <X className="w-3.5 h-3.5 stroke-[3px]" /> {t('memoryGame.notShownBadge')}
         </span>
       )}
 
@@ -74,7 +78,7 @@ export default function MemoryItemCard({
 
       {/* Label */}
       <span className="text-base sm:text-lg font-extrabold text-center block tracking-tight">
-        {item.name}
+        {itemName}
       </span>
     </button>
   );

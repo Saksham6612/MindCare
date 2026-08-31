@@ -1,10 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { HelpCircle, CheckCircle, Clock } from 'lucide-react';
 import MemoryItemCard from './MemoryItemCard';
+import { useLanguage } from '../../../context/LanguageContext';
 
 export default function RecallStep({ selectableOptions, onSubmit }) {
   const [selectedIds, setSelectedIds] = useState([]);
   const [elapsedSeconds, setElapsedSeconds] = useState(0);
+  const { t } = useLanguage();
 
   // Measure response time
   useEffect(() => {
@@ -35,13 +37,13 @@ export default function RecallStep({ selectableOptions, onSubmit }) {
           </div>
           <div>
             <span className="text-xs sm:text-sm font-extrabold uppercase tracking-wider text-purple-800 bg-purple-100 px-3 py-0.5 rounded-full inline-block mb-1">
-              Step 2: Recall
+              {t('memoryGame.step2Title')}
             </span>
             <h2 className="text-2xl sm:text-3xl font-extrabold text-gray-900 tracking-tight">
-              Which objects did you see?
+              {t('memoryGame.recallHeading')}
             </h2>
             <p className="text-base sm:text-lg text-gray-600 font-semibold">
-              Tap the cards you remember from earlier, then submit your answers.
+              {t('memoryGame.recallSubheading')}
             </p>
           </div>
         </div>
@@ -69,7 +71,7 @@ export default function RecallStep({ selectableOptions, onSubmit }) {
       {/* Submit Action Bar */}
       <div className="senior-card p-5 sm:p-6 bg-white border-2 border-purple-200 shadow-sm flex flex-col sm:flex-row items-center justify-between gap-4">
         <div className="text-gray-700 font-bold text-lg sm:text-xl">
-          Selected: <span className="text-purple-700 font-black text-2xl">{selectedIds.length}</span> objects
+          {t('memoryGame.selectedCount', { count: selectedIds.length })}
         </div>
 
         <button
@@ -82,7 +84,7 @@ export default function RecallStep({ selectableOptions, onSubmit }) {
           }`}
         >
           <CheckCircle className="w-6 h-6" />
-          <span>Submit Answers</span>
+          <span>{t('memoryGame.submitAnswers')}</span>
         </button>
       </div>
     </div>

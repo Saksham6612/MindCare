@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import { Eye, Clock, ArrowRight } from 'lucide-react';
+import { Eye, ArrowRight } from 'lucide-react';
 import MemoryItemCard from './MemoryItemCard';
+import { useLanguage } from '../../../context/LanguageContext';
 
 export default function MemorizeStep({ targetObjects, onComplete, durationSeconds = 5, difficulty = 'Easy' }) {
   const [secondsRemaining, setSecondsRemaining] = useState(durationSeconds);
+  const { t } = useLanguage();
 
   useEffect(() => {
     setSecondsRemaining(durationSeconds);
@@ -23,6 +25,7 @@ export default function MemorizeStep({ targetObjects, onComplete, durationSecond
   }, [secondsRemaining, onComplete]);
 
   const progressPercent = ((durationSeconds - secondsRemaining) / durationSeconds) * 100;
+  const translatedDifficulty = t(`difficulty.${difficulty.toLowerCase()}`) || difficulty;
 
   return (
     <div className="space-y-6 sm:space-y-7 animate-in fade-in duration-300">
@@ -35,17 +38,17 @@ export default function MemorizeStep({ targetObjects, onComplete, durationSecond
           <div>
             <div className="flex items-center gap-2 mb-1">
               <span className="text-xs sm:text-sm font-extrabold uppercase tracking-wider text-purple-800 bg-purple-100 px-3 py-0.5 rounded-full inline-block">
-                Step 1: Memorization
+                {t('memoryGame.step1Title')}
               </span>
               <span className="text-xs font-bold px-2 py-0.5 rounded-md bg-purple-50 text-purple-900 border border-purple-200">
-                Level: {difficulty}
+                {translatedDifficulty}
               </span>
             </div>
             <h2 className="text-2xl sm:text-3xl font-extrabold text-gray-900 tracking-tight">
-              Memorize these {targetObjects.length} objects
+              {t('memoryGame.memorizeHeading', { count: targetObjects.length })}
             </h2>
             <p className="text-base sm:text-lg text-gray-600 font-semibold">
-              Look closely. They will hide in <span className="text-purple-700 font-black">{secondsRemaining} seconds</span>.
+              {t('memoryGame.memorizeSubheading', { seconds: secondsRemaining })}
             </p>
           </div>
         </div>
@@ -60,7 +63,7 @@ export default function MemorizeStep({ targetObjects, onComplete, durationSecond
             onClick={onComplete}
             className="px-4 py-3 bg-purple-50 hover:bg-purple-100 text-purple-900 border-2 border-purple-300 rounded-2xl font-bold text-sm sm:text-base flex items-center gap-2 transition active:scale-95 cursor-pointer"
           >
-            <span>I'm Ready</span>
+            <span>{t('memoryGame.imReady')}</span>
             <ArrowRight className="w-4 h-4" />
           </button>
         </div>
@@ -74,7 +77,7 @@ export default function MemorizeStep({ targetObjects, onComplete, durationSecond
         />
       </div>
 
-      {/* 6 Target Objects Grid */}
+      {/* Target Objects Grid */}
       <div className="grid grid-cols-2 sm:grid-cols-3 gap-4 sm:gap-5">
         {targetObjects.map((item) => (
           <MemoryItemCard
